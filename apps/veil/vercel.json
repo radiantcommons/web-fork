@@ -1,12 +1,4 @@
 {
-  "installCommand": "curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh && rustup target add wasm32-unknown-unknown && pnpm install",
-  "buildCommand": "cd ../.. && pnpm turbo run build --filter=penumbra-veil...",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "regions": ["iad1"],
-  "env": {
-    "RUST_BACKTRACE": "1",
-    "TURBO_TELEMETRY_DISABLED": "1",
-    "DEBUG": "*"
-  }
+  "buildCommand": "curl -fsSL https://rustwasm.github.io/wasm-pack/installer/init.sh | sh && source $HOME/.cargo/env && wasm-pack --version && pnpm build",
+  "installCommand": "pnpm install"
 }
