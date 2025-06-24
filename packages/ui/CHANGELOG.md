@@ -1,5 +1,146 @@
 # @penumbra-zone/ui
 
+## 15.0.2
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/getters@27.0.1
+  - @penumbra-zone/perspective@60.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/types@34.2.1
+
+## 15.0.1
+
+### Patch Changes
+
+- c770cd5: Add `whitespace-nowrap` class to all heading TableCells
+
+## 15.0.0
+
+### Major Changes
+
+- dcfbe8a: Upgrade to React 19 and address forwardRef deprecation across the repo
+
+### Patch Changes
+
+- 78e36b8: Add `padStart` prop to `ValueViewComponent`
+- 78e36b8: TableCell: add `justify` prop for content alignment
+- dcfbe8a: feat(ui): Added v2 Portfolio Page layout including PortfolioBalance and AssetCard components. Setup dual-theme build process to avoid tailwind conflicts in minifront app (legacy vs. v2).
+- 2066c86: Fix styles build
+  - @penumbra-zone/perspective@60.0.0
+
+## 14.0.4
+
+### Patch Changes
+
+- Updated dependencies [cee8150]
+  - @penumbra-zone/types@34.2.0
+  - @penumbra-zone/perspective@59.0.0
+
+## 14.0.3
+
+### Patch Changes
+
+- Updated dependencies [ec85373]
+- Updated dependencies [cba3daf]
+  - @penumbra-zone/types@34.1.0
+  - @penumbra-zone/perspective@58.0.0
+
+## 14.0.2
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/types@34.0.0
+  - @penumbra-zone/bech32m@17.0.0
+  - @penumbra-zone/getters@27.0.0
+  - @penumbra-zone/perspective@57.0.0
+
+## 14.0.1
+
+### Patch Changes
+
+- Updated dependencies [085e855]
+  - @penumbra-zone/types@33.1.0
+  - @penumbra-zone/perspective@56.0.0
+
+## 14.0.0
+
+### Major Changes
+
+- 4a51a46: Remove forwardRef that was deprecated in React 19
+- 4a51a46: Upgrade to React 19
+
+## 13.18.0
+
+### Minor Changes
+
+- 93f1d05: proto and storage changes to support querying tournament votes
+
+### Patch Changes
+
+- 28a251c: Move `buttons` Dialog.Content's prop out of the scrollable area
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/types@33.0.0
+  - @penumbra-zone/bech32m@16.0.0
+  - @penumbra-zone/getters@26.0.0
+  - @penumbra-zone/perspective@55.0.0
+
+## 13.17.4
+
+### Patch Changes
+
+- @penumbra-zone/perspective@54.0.0
+
+## 13.17.3
+
+### Patch Changes
+
+- @penumbra-zone/perspective@53.0.2
+
+## 13.17.2
+
+### Patch Changes
+
+- 405b5b1: Fix swap ActionViews not rendering values correctly
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/getters@25.0.1
+  - @penumbra-zone/types@32.2.1
+  - @penumbra-zone/perspective@53.0.1
+
+## 13.17.1
+
+### Patch Changes
+
+- Updated dependencies [ce4c43e]
+  - @penumbra-zone/types@32.2.0
+  - @penumbra-zone/perspective@53.0.0
+
+## 13.17.0
+
+### Minor Changes
+
+- 8e6e60c: Add Checkbox UI component
+- 5c45f2c: Implement `IbcRelay` and `Ics20Withdrawal` ActionViews
+
+### Patch Changes
+
+- 80148ae: Fix bugs related to transaction history and transaction/action views
+- 3c48120: Fix Swap getters for ActionViews
+- Updated dependencies [a5e14e9]
+- Updated dependencies [b0e0eef]
+- Updated dependencies [5c45f2c]
+- Updated dependencies [85022e1]
+- Updated dependencies [3c48120]
+  - @penumbra-zone/perspective@52.0.0
+  - @penumbra-zone/types@32.1.0
+
 ## 13.16.0
 
 ### Minor Changes

@@ -8,6 +8,7 @@ export enum PagePath {
   Portfolio = '/portfolio',
   Tournament = '/tournament',
   TournamentRound = '/tournament/:epoch',
+  TournamentDelegator = '/tournament/delegator/:address',
   TradePair = '/trade/:primary/:numeraire',
   InspectLp = '/inspect/lp/:id',
   LpLeaderboard = '/inspect/lp-leaderboard',
@@ -28,4 +29,14 @@ export const useBasePath = (): PagePath => {
     return base;
   }
   return path;
+};
+
+export const getTradePairPath = (
+  primary: string,
+  numeraire: string,
+  options: { highlight?: 'liquidity' } = {},
+): string => {
+  const route = PagePath.TradePair.replace(':primary', primary).replace(':numeraire', numeraire);
+  const query = options.highlight ? `?highlight=${options.highlight}` : '';
+  return `${route}${query}`;
 };

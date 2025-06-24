@@ -11,19 +11,40 @@ import cn from 'clsx';
 import { shortify } from '@penumbra-zone/types/shortify';
 import { detailTechnical, technical } from '../utils/typography.ts';
 import { pnum } from '@penumbra-zone/types/pnum';
+import { ThemeColor, getThemeColorClass } from '../utils/color';
 
 type Context = 'default' | 'table';
 
-const ValueText = ({ children, density }: { children: ReactNode; density: Density }) => {
-  if (density === 'sparse') {
-    return <Text body>{children}</Text>;
-  }
-
+const ValueText = ({
+  children,
+  density,
+  textColor,
+}: {
+  children: ReactNode;
+  density: Density;
+  textColor?: ThemeColor;
+}) => {
   if (density === 'slim') {
-    return <Text detailTechnical>{children}</Text>;
+    return (
+      <Text detailTechnical color={textColor}>
+        {children}
+      </Text>
+    );
   }
 
-  return <Text detail>{children}</Text>;
+  if (density === 'compact') {
+    return (
+      <Text smallTechnical color={textColor}>
+        {children}
+      </Text>
+    );
+  }
+
+  return (
+    <Text technical color={textColor}>
+      {children}
+    </Text>
+  );
 };
 
 const getSignColor = (signed?: ValueViewComponentProps<Context>['signed']): string => {
@@ -81,14 +102,28 @@ export interface ValueViewComponentProps<SelectedContext extends Context> {
    */
   showValue?: boolean;
   /**
-   * If true, the amount will have trailing zeros.
+   * If true, the amount will have trailing zeros. The length of the decimal number part
+   * will become the exponent of the passed token.
    */
   trailingZeros?: boolean;
+  /**
+   * Add "figure space &numsp;" characters to the formatted amount until this length is reached,
+   * useful for aligning numbers in a table.
+   *
+   * For example, if the formatted amount is "1,000.23" (length 8) and `padStart` is 10, the resulting
+   * string will be "  1,000.23" (length 10).
+   */
+  padStart?: number;
   /**
    * The density to use for the component. If not provided, the density will be
    * determined by the `Density` context.
    */
   density?: Density;
+  /**
+   * Custom text color for the value and symbol. When provided, overrides default colors.
+   * Accepts theme color values like 'destructive.light', 'text.secondary', etc.
+   */
+  textColor?: ThemeColor;
 }
 
 /**
@@ -103,12 +138,14 @@ export const ValueViewComponent = <SelectedContext extends Context = 'default'>(
   context,
   priority = 'primary',
   signed,
+  padStart,
   showIcon = true,
   showSymbol = true,
   abbreviate = false,
   showValue = true,
   trailingZeros = false,
   density: densityProps,
+  textColor,
 }: ValueViewComponentProps<SelectedContext>) => {
   const densityContext = useDensity();
   const density = densityProps ?? densityContext;
@@ -120,6 +157,11 @@ export const ValueViewComponent = <SelectedContext extends Context = 'default'>(
   const formattedAmount = abbreviate
     ? shortify(pnum(valueView).toNumber())
     : pnum(valueView).toFormattedString({ trailingZeros });
+
+  const figureSpace = ' '; // figure space character, not a regular space
+  const padString = padStart
+    ? figureSpace.repeat(Math.max(0, padStart - formattedAmount.length))
+    : '';
 
   const metadata = getMetadata.optional(valueView);
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- possibly empty string
@@ -135,7 +177,10 @@ export const ValueViewComponent = <SelectedContext extends Context = 'default'>(
       )}
       else={children => (
         <span
-          className={cn(density === 'sparse' ? technical : detailTechnical, 'text-text-primary')}
+          className={cn(
+            density === 'sparse' ? technical : detailTechnical,
+            textColor ? getThemeColorClass(textColor).text : '',
+          )}
         >
           {children}
         </span>
@@ -144,29 +189,34 @@ export const ValueViewComponent = <SelectedContext extends Context = 'default'>(
       <span className={cn('flex w-max max-w-full items-center text-ellipsis', getGap(density))}>
         {showIcon && (
           <div className='shrink-0'>
-            <AssetIcon hideBadge size={getIconSize(density)} metadata={metadata} />
+            <AssetIcon size={getIconSize(density)} metadata={metadata} />
           </div>
         )}
 
         <div
           className={cn(
-            'grow shrink flex items-center overflow-hidden',
+            'flex shrink grow items-center overflow-hidden',
             context === 'table' &&
               priority === 'secondary' &&
-              'border-b-2 border-dashed border-other-tonalStroke',
+              'border-b-2 border-dashed border-other-tonal-stroke',
             getGap(density),
-            getSignColor(signed),
+            textColor ? getThemeColorClass(textColor).text : getSignColor(signed),
           )}
         >
           {showValue && (
             <div className='flex shrink grow items-center' title={formattedAmount}>
               {signed && getSign(signed)}
-              <ValueText density={density}>{formattedAmount}</ValueText>
+              <ValueText density={density} textColor={textColor}>
+                {padString}
+                {formattedAmount}
+              </ValueText>
             </div>
           )}
           {showSymbol && (
             <div className='max-w-24 shrink grow truncate' title={symbol}>
-              <ValueText density={density}>{symbol}</ValueText>
+              <ValueText density={density} textColor={textColor}>
+                {symbol}
+              </ValueText>
             </div>
           )}
         </div>
@@ -192,5 +242,5 @@ const getIconSize = (density: Density) => {
   if (density === 'compact') {
     return 'md';
   }
-  return 'md';
+  return 'sm';
 };

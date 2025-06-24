@@ -1,9 +1,6 @@
 import plugin from 'tailwindcss/plugin';
 import tailwindCssAnimatePlugin from 'tailwindcss-animate';
 
-// TODO: Replace the theme to v2 instead of partially using it
-import { tailwindConfig as v2TailwindConfig } from '@penumbra-zone/ui-deprecated/tailwind';
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -27,14 +24,13 @@ export default {
       fontFamily: {
         body: ['Devanagari Sangam', 'sans-serif'],
         headline: ['Faktum', 'sans-serif'],
-        /* Using Iosevka Term rather than Iosevka ensures that all characters are really the same width, even weird unicode ones. */
         mono: ['Iosevka Term', 'monospace'],
       },
       colors: {
-        v2: v2TailwindConfig.theme.extend.colors,
         border: {
           DEFAULT: 'hsl(var(--border))',
           secondary: 'var(--border-secondary)',
+          otherTonalStroke: 'rgba(250, 250, 250, 0.15)',
         },
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -43,10 +39,16 @@ export default {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          light: 'rgba(244, 156, 67, 0.25)',
+          main: '#BA4D14',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+        },
+        unshield: {
+          light: 'rgba(193, 166, 204, 0.25)',
+          main: '#705279',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
@@ -105,11 +107,19 @@ export default {
         brown: {
           DEFAULT: 'var(--brown)',
         },
+        text: {
+          primary: 'var(--text-primary, #FFFFFF)',
+          secondary: 'var(--text-secondary, rgba(255, 255, 255, 0.7))',
+          tertiary: 'var(--text-tertiary, rgba(255, 255, 255, 0.5))',
+          disabled: 'var(--text-disabled, rgba(255, 255, 255, 0.3))',
+        },
+        'other-tonalFill5': 'rgba(250, 250, 250, 0.05)',
+        actionHoverOverlay: 'rgba(83, 174, 168, 0.15)',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        sm: 'var(--radius)',
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -142,10 +152,6 @@ export default {
         },
       },
       backgroundImage: {
-        // The final `linear-gradient` is just to make a solid charcoal
-        // background color for the radial gradients to sit on top of. If
-        // there's a way to make a solid background color without
-        // `linear-gradient`, feel free to update this.
         'card-radial': `
           radial-gradient(33% 50% at 15% 44%, color-mix(in srgb, var(--rust) 20%, transparent), transparent),
           radial-gradient(33% 40% at 105% 42%, color-mix(in srgb, var(--teal) 20%, transparent), transparent),
@@ -164,16 +170,37 @@ export default {
           ),
           url('penumbra-logo.svg')
         `,
+        gradientAccentRadial:
+          'radial-gradient(100% 100% at 0% 0%, var(--primary-light) 0%, rgba(244, 156, 67, 0.03) 100%)',
+        gradientUnshieldRadial:
+          'radial-gradient(100% 100% at 0% 0%, var(--unshield-light) 0%, rgba(193, 166, 204, 0.03) 100%)',
+        actionHoverOverlayImage:
+          'linear-gradient(0deg, var(--Action-Hover-Overlay) 0%, var(--Action-Hover-Overlay) 100%)',
+        'gradient-accent-radial-background':
+          'radial-gradient(100% 100% at 0% 0%, var(--Primary-Light, rgba(244, 156, 67, 0.25)) 0%, rgba(244, 156, 67, 0.03) 100%)',
+        'gradient-unshield-radial-background':
+          'radial-gradient(100% 100% at 0% 0%, var(--Unshield-Light, rgba(193, 166, 204, 0.25)) 0%, rgba(193, 166, 204, 0.03) 100%)',
       },
     },
   },
   plugins: [
     tailwindCssAnimatePlugin,
-
-    plugin(({ addUtilities }) => {
+    plugin(({ addUtilities, addBase, theme }) => {
       addUtilities({
         '.grid-std-spacing': {
           '@apply gap-6 md:gap-4 xl:gap-5': {},
+        },
+      });
+      addBase({
+        ':root': {
+          '--text-primary': '#FFFFFF',
+          '--text-secondary': 'rgba(255, 255, 255, 0.7)',
+          '--text-tertiary': 'rgba(255, 255, 255, 0.5)',
+          '--text-disabled': 'rgba(255, 255, 255, 0.3)',
+          '--Other-Tonal-Fill-5': 'rgba(250, 250, 250, 0.05)',
+          '--Action-Hover-Overlay': 'rgba(83, 174, 168, 0.15)',
+          '--primary-light': 'rgba(244, 156, 67, 0.25)',
+          '--unshield-light': 'rgba(193, 166, 204, 0.25)',
         },
       });
     }),

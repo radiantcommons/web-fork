@@ -1,5 +1,178 @@
 # minifront
 
+## 6.34.7
+
+### Patch Changes
+
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/client@28.1.1
+  - @penumbra-zone/crypto-web@46.0.1
+  - @penumbra-zone/getters@27.0.1
+  - @penumbra-zone/perspective@60.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/transport-dom@7.5.2
+  - @penumbra-zone/types@34.2.1
+  - @penumbra-zone/ui@15.0.2
+  - @penumbra-zone/ui-deprecated@21.0.2
+  - @penumbra-zone/zquery@3.0.2
+
+## 6.34.6
+
+### Patch Changes
+
+- 36e68f4: Fix background color of minifront, connections issues and z-index for SegmentPicker
+- Updated dependencies [c770cd5]
+- Updated dependencies [36e68f4]
+- Updated dependencies [91eb242]
+  - @penumbra-zone/ui@15.0.1
+  - @penumbra-zone/ui-deprecated@21.0.1
+  - @penumbra-zone/client@28.1.0
+
+## 6.34.5
+
+### Patch Changes
+
+- Updated dependencies [dcfbe8a]
+- Updated dependencies [78e36b8]
+- Updated dependencies [78e36b8]
+- Updated dependencies [dcfbe8a]
+- Updated dependencies [2066c86]
+  - @penumbra-zone/ui-deprecated@21.0.0
+  - @penumbra-zone/ui@15.0.0
+  - @penumbra-zone/perspective@60.0.0
+
+## 6.34.4
+
+### Patch Changes
+
+- Updated dependencies [cee8150]
+  - @penumbra-zone/types@34.2.0
+  - @penumbra-zone/crypto-web@46.0.0
+  - @penumbra-zone/ui-deprecated@20.0.2
+  - @penumbra-zone/perspective@59.0.0
+
+## 6.34.3
+
+### Patch Changes
+
+- Updated dependencies [ec85373]
+- Updated dependencies [cba3daf]
+  - @penumbra-zone/types@34.1.0
+  - @penumbra-zone/perspective@58.0.0
+  - @penumbra-zone/crypto-web@45.0.0
+  - @penumbra-zone/ui-deprecated@20.0.1
+
+## 6.34.2
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/types@34.0.0
+  - @penumbra-zone/bech32m@17.0.0
+  - @penumbra-zone/client@28.0.0
+  - @penumbra-zone/getters@27.0.0
+  - @penumbra-zone/perspective@57.0.0
+  - @penumbra-zone/ui-deprecated@20.0.0
+  - @penumbra-zone/crypto-web@44.0.0
+
+## 6.34.1
+
+### Patch Changes
+
+- 270def6: feat(minifront): Update v2 header navigation tabs (Portfolio, Shielding), refactor layout to match the minifront v2 layout, and fix active tab highlighting
+- Updated dependencies [085e855]
+  - @penumbra-zone/types@33.1.0
+  - @penumbra-zone/crypto-web@43.0.0
+  - @penumbra-zone/ui-deprecated@19.0.1
+  - @penumbra-zone/perspective@56.0.0
+
+## 6.34.0
+
+### Minor Changes
+
+- 694319c: bump registry version
+
+### Patch Changes
+
+- Updated dependencies [4a51a46]
+  - @penumbra-zone/ui-deprecated@19.0.0
+
+## 6.33.2
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/types@33.0.0
+  - @penumbra-zone/bech32m@16.0.0
+  - @penumbra-zone/client@27.0.0
+  - @penumbra-zone/getters@26.0.0
+  - @penumbra-zone/perspective@55.0.0
+  - @penumbra-zone/ui-deprecated@18.0.0
+  - @penumbra-zone/crypto-web@42.0.0
+
+## 6.33.1
+
+### Patch Changes
+
+- @penumbra-zone/perspective@54.0.0
+- @penumbra-zone/ui-deprecated@17.1.6
+
+## 6.33.0
+
+### Minor Changes
+
+- 51516ba: addressing bug fixes with syncing modal
+
+### Patch Changes
+
+- @penumbra-zone/perspective@53.0.2
+- @penumbra-zone/ui-deprecated@17.1.5
+
+## 6.32.2
+
+### Patch Changes
+
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/getters@25.0.1
+  - @penumbra-zone/types@32.2.1
+  - @penumbra-zone/perspective@53.0.1
+  - @penumbra-zone/ui-deprecated@17.1.4
+  - @penumbra-zone/crypto-web@41.0.1
+
+## 6.32.1
+
+### Patch Changes
+
+- Updated dependencies [ce4c43e]
+  - @penumbra-zone/types@32.2.0
+  - @penumbra-zone/crypto-web@41.0.0
+  - @penumbra-zone/ui-deprecated@17.1.3
+  - @penumbra-zone/perspective@53.0.0
+
+## 6.32.0
+
+### Minor Changes
+
+- 85022e1: fix unbonding penalty range calculation
+
+### Patch Changes
+
+- 80148ae: Fix bugs related to transaction history and transaction/action views
+- Updated dependencies [80148ae]
+- Updated dependencies [a5e14e9]
+- Updated dependencies [b0e0eef]
+- Updated dependencies [5c45f2c]
+- Updated dependencies [85022e1]
+- Updated dependencies [3c48120]
+  - @penumbra-zone/ui-deprecated@17.1.2
+  - @penumbra-zone/perspective@52.0.0
+  - @penumbra-zone/types@32.1.0
+  - @penumbra-zone/crypto-web@40.0.0
+
 ## 6.31.2
 
 ### Patch Changes

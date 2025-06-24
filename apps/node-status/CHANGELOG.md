@@ -1,5 +1,127 @@
 # node-status
 
+## 4.1.70
+
+### Patch Changes
+
+- Updated dependencies [82d034e]
+  - @penumbra-zone/crypto-web@46.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/types@34.2.1
+  - @penumbra-zone/ui-deprecated@21.0.2
+
+## 4.1.69
+
+### Patch Changes
+
+- Updated dependencies [36e68f4]
+  - @penumbra-zone/ui-deprecated@21.0.1
+
+## 4.1.68
+
+### Patch Changes
+
+- Updated dependencies [dcfbe8a]
+  - @penumbra-zone/ui-deprecated@21.0.0
+
+## 4.1.67
+
+### Patch Changes
+
+- Updated dependencies [cee8150]
+  - @penumbra-zone/types@34.2.0
+  - @penumbra-zone/crypto-web@46.0.0
+  - @penumbra-zone/ui-deprecated@20.0.2
+
+## 4.1.66
+
+### Patch Changes
+
+- Updated dependencies [ec85373]
+  - @penumbra-zone/types@34.1.0
+  - @penumbra-zone/crypto-web@45.0.0
+  - @penumbra-zone/ui-deprecated@20.0.1
+
+## 4.1.65
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/types@34.0.0
+  - @penumbra-zone/ui-deprecated@20.0.0
+  - @penumbra-zone/crypto-web@44.0.0
+
+## 4.1.64
+
+### Patch Changes
+
+- Updated dependencies [085e855]
+  - @penumbra-zone/types@33.1.0
+  - @penumbra-zone/crypto-web@43.0.0
+  - @penumbra-zone/ui-deprecated@19.0.1
+
+## 4.1.63
+
+### Patch Changes
+
+- Updated dependencies [4a51a46]
+  - @penumbra-zone/ui-deprecated@19.0.0
+
+## 4.1.62
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/types@33.0.0
+  - @penumbra-zone/ui-deprecated@18.0.0
+  - @penumbra-zone/crypto-web@42.0.0
+
+## 4.1.61
+
+### Patch Changes
+
+- @penumbra-zone/ui-deprecated@17.1.6
+
+## 4.1.60
+
+### Patch Changes
+
+- @penumbra-zone/ui-deprecated@17.1.5
+
+## 4.1.59
+
+### Patch Changes
+
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/types@32.2.1
+  - @penumbra-zone/ui-deprecated@17.1.4
+  - @penumbra-zone/crypto-web@41.0.1
+
+## 4.1.58
+
+### Patch Changes
+
+- Updated dependencies [ce4c43e]
+  - @penumbra-zone/types@32.2.0
+  - @penumbra-zone/crypto-web@41.0.0
+  - @penumbra-zone/ui-deprecated@17.1.3
+
+## 4.1.57
+
+### Patch Changes
+
+- Updated dependencies [80148ae]
+- Updated dependencies [b0e0eef]
+- Updated dependencies [5c45f2c]
+- Updated dependencies [85022e1]
+- Updated dependencies [3c48120]
+  - @penumbra-zone/ui-deprecated@17.1.2
+  - @penumbra-zone/types@32.1.0
+  - @penumbra-zone/crypto-web@40.0.0
+
 ## 4.1.56
 
 ### Patch Changes

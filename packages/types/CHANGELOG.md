@@ -1,5 +1,86 @@
 # @penumbra-zone/types
 
+## 34.2.1
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/getters@27.0.1
+  - @penumbra-zone/protobuf@10.1.1
+
+## 34.2.0
+
+### Minor Changes
+
+- cee8150: don't specify auto-increment key
+
+## 34.1.0
+
+### Minor Changes
+
+- ec85373: storage helper to save remote epoch
+
+## 34.0.0
+
+### Minor Changes
+
+- dc1eb8b: tct frontier support for freshly generated wallets
+- f9cd9dd: chunk genesis syncing
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/bech32m@17.0.0
+  - @penumbra-zone/getters@27.0.0
+
+## 33.1.0
+
+### Minor Changes
+
+- 085e855: use asset id instead of metadata in liquidity tournament idb table
+
+## 33.0.0
+
+### Minor Changes
+
+- 93f1d05: proto and storage changes to support querying tournament votes
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/bech32m@16.0.0
+  - @penumbra-zone/getters@26.0.0
+
+## 32.2.1
+
+### Patch Changes
+
+- 405b5b1: Fix swap ActionViews not rendering values correctly
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/getters@25.0.1
+
+## 32.2.0
+
+### Minor Changes
+
+- ce4c43e: Add empty string case to round fn
+
+## 32.1.0
+
+### Minor Changes
+
+- b0e0eef: Add exponentialNotation to round fn
+- 85022e1: remove `getUnbondingStartHeight` export from assets regex module
+
+### Patch Changes
+
+- 5c45f2c: Fix `pnum` failing on `undefined` in denom exponent
+- 3c48120: Fix Swap getters for ActionViews
+
 ## 32.0.0
 
 ### Minor Changes

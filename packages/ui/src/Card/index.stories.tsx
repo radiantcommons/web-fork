@@ -14,7 +14,7 @@ const meta: Meta<typeof Card> = {
   decorators: [
     Story => (
       <div
-        className='text-text-primary -before:z-[1] before:bg-[url("https://images.unsplash.com/photo-1517405404692-6eddc8fb975f?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")] relative p-20 before:absolute before:inset-0 before:bg-caution-main before:opacity-60 before:blur-sm before:content-[""]'
+        className='relative p-20 text-text-primary before:absolute before:inset-0 before:-z-1 before:bg-caution-main before:bg-[url("https://images.unsplash.com/photo-1517405404692-6eddc8fb975f?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")] before:opacity-60 before:blur-xs before:content-[""]'
         style={{}}
       >
         <Story />
@@ -77,6 +77,34 @@ export const Basic: Story = {
         <Button actionType='accent' icon={Send}>
           Send
         </Button>
+      </Card>
+    );
+  },
+};
+
+export const WithEndContent: Story = {
+  args: {
+    as: 'section',
+    title: 'Your Assets',
+    endContent: 'info',
+  },
+  render: function Render({ as, title, endContent }) {
+    return (
+      <Card as={as} title={title} endContent={endContent}>
+        <Card.Stack>
+          <Card.Section>
+            <Text>
+              This card demonstrates the use of the InfoButton component in the endContent position.
+              Click on the shield icon to see more information about your assets.
+            </Text>
+          </Card.Section>
+          <Card.Section>
+            <Text>
+              The endContent prop allows placing any content next to the title, creating a clean and
+              consistent UI.
+            </Text>
+          </Card.Section>
+        </Card.Stack>
       </Card>
     );
   },

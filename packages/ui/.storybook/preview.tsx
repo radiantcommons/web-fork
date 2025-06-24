@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Density } from '../src/Density';
 import { Tabs } from '../src/Tabs';
 
-import './tailwind.css';
+import '../src/theme/theme.css';
 import '../src/theme/fonts.css';
 import '../src/theme/font-sizes.css';
 import '../src/theme/globals.css';
@@ -52,6 +52,14 @@ const preview: Preview = {
   parameters: {
     docs: {
       theme: penumbraTheme,
+    },
+    backgrounds: {
+      default: 'dark',
+      values: [
+        { name: 'dark', value: '#121212' },
+        { name: 'black', value: '#000000' },
+        { name: 'light', value: '#ffffff' },
+      ],
     },
   },
   decorators: [

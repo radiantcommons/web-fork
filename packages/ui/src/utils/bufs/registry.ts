@@ -5,6 +5,8 @@ import {
   OSMO_METADATA,
   LPNFT_METADATA,
   DELEGATION_TOKEN_METADATA,
+  DELEGATE_ACTION_DELEGATION_DENOM,
+  DELEGATE_ACTION_DELEGATION_METADATA,
 } from './metadata';
 import { uint8ArrayToBase64 } from '@penumbra-zone/types/base64';
 
@@ -17,11 +19,14 @@ const METADATA_MAP: Record<string, Metadata> = {
   [uint8ArrayToBase64(DELEGATION_TOKEN_METADATA.penumbraAssetId!.inner)]: DELEGATION_TOKEN_METADATA,
 
   // Map by denom
-  [USDC_METADATA.display]: USDC_METADATA,
-  [PENUMBRA_METADATA.display]: PENUMBRA_METADATA,
-  [OSMO_METADATA.display]: OSMO_METADATA,
-  [LPNFT_METADATA.display]: LPNFT_METADATA,
-  [DELEGATION_TOKEN_METADATA.display]: DELEGATION_TOKEN_METADATA,
+  [USDC_METADATA.base]: USDC_METADATA,
+  [PENUMBRA_METADATA.base]: PENUMBRA_METADATA,
+  [OSMO_METADATA.base]: OSMO_METADATA,
+  [LPNFT_METADATA.base]: LPNFT_METADATA,
+  [DELEGATION_TOKEN_METADATA.base]: DELEGATION_TOKEN_METADATA,
+
+  // Add delegation token for DelegateAction's specific validator
+  [DELEGATE_ACTION_DELEGATION_DENOM]: DELEGATE_ACTION_DELEGATION_METADATA,
   /* eslint-enable @typescript-eslint/no-non-null-assertion -- enable again */
 };
 

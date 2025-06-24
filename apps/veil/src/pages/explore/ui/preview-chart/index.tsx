@@ -1,29 +1,28 @@
-import { theme } from '@penumbra-zone/ui/theme';
 import { adaptData, PreviewChartAdapterOptions } from './adapter';
 import { useId } from 'react';
 
 export interface PreviewChartProps extends PreviewChartAdapterOptions {
-  sign: 'positive' | 'negative' | 'neutral';
+  sign: number;
 }
 
 const getGradientColor = (sign: PreviewChartProps['sign']) => {
-  if (sign === 'positive') {
-    return theme.color.success.main;
+  if (sign > 0.0) {
+    return `var(--color-success-main)`;
   }
-  if (sign === 'negative') {
-    return theme.color.destructive.main;
+  if (sign < 0.0) {
+    return `var(--color-destructive-main)`;
   }
-  return theme.color.neutral.main;
+  return `var(--color-neutral-main)`;
 };
 
 const getColor = (sign: PreviewChartProps['sign']) => {
-  if (sign === 'positive') {
-    return theme.color.success.light;
+  if (sign > 0.0) {
+    return `var(--color-success-light)`;
   }
-  if (sign === 'negative') {
-    return theme.color.destructive.light;
+  if (sign < 0.0) {
+    return `var(--color-destructive-light)`;
   }
-  return theme.color.neutral.light;
+  return `var(--color-neutral-light)`;
 };
 
 /**
@@ -80,14 +79,19 @@ export const PreviewChart = (props: PreviewChartProps) => {
     <svg width={width} height={height}>
       <defs>
         <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
-          <stop offset='0%' stopColor={getGradientColor(sign)} stopOpacity='0.5' />
-          <stop offset='100%' stopColor={getGradientColor(sign)} stopOpacity='0' />
+          <stop offset='0%' style={{ stopColor: getGradientColor(sign) }} stopOpacity='0.5' />
+          <stop offset='100%' style={{ stopColor: getGradientColor(sign) }} stopOpacity='0' />
         </linearGradient>
       </defs>
 
       <polygon strokeLinecap='round' points={areaPoints} fill={`url(#${gradientId})`} />
 
-      <polyline fill='none' strokeWidth='1.5' stroke={getColor(sign)} points={linePoints} />
+      <polyline
+        fill='none'
+        strokeWidth='1.5'
+        style={{ stroke: getColor(sign) }}
+        points={linePoints}
+      />
     </svg>
   );
 };

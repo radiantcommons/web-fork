@@ -231,6 +231,14 @@ export class IndexedDb implements IndexedDbInterface {
     await this.u.updateAll(txs);
   }
 
+  async saveFullSyncHeight(height: bigint) {
+    await this.u.update({
+      table: 'FULL_SYNC_HEIGHT',
+      value: height,
+      key: 'height',
+    });
+  }
+
   async getFullSyncHeight() {
     return this.db.get('FULL_SYNC_HEIGHT', 'height');
   }
@@ -428,13 +436,18 @@ export class IndexedDb implements IndexedDbInterface {
   /**
    * Retrieves liquidity tournament votes and rewards for a given epoch.
    */
-  async getLQTHistoricalVotes(epoch: bigint): Promise<
+  async getLQTHistoricalVotes(
+    epoch: bigint,
+    subaccount?: number,
+  ): Promise<
     {
+      incentivizedAsset: AssetId;
+      epoch: string;
       TransactionId: TransactionId;
-      AssetMetadata: Metadata;
       VoteValue: Value;
       RewardValue: Amount | undefined;
       id: string | undefined;
+      subaccount?: number;
     }[]
   > {
     const tournamentVotes = await this.db.getAllFromIndex(
@@ -443,41 +456,92 @@ export class IndexedDb implements IndexedDbInterface {
       epoch.toString(),
     );
 
-    return tournamentVotes.map(tournamentVote => ({
+    const filtered = subaccount
+      ? tournamentVotes.filter(vote => vote.subaccount === subaccount)
+      : tournamentVotes;
+
+    return filtered.map(tournamentVote => ({
+      incentivizedAsset: AssetId.fromJson(tournamentVote.incentivizedAsset, { typeRegistry }),
+      epoch: tournamentVote.epoch,
       TransactionId: TransactionId.fromJson(tournamentVote.TransactionId, { typeRegistry }),
-      AssetMetadata: Metadata.fromJson(tournamentVote.AssetMetadata, { typeRegistry }),
       VoteValue: Value.fromJson(tournamentVote.VoteValue, { typeRegistry }),
       RewardValue: tournamentVote.RewardValue
         ? Amount.fromJson(tournamentVote.RewardValue, { typeRegistry })
         : undefined,
       id: tournamentVote.id,
+      subaccount: tournamentVote.subaccount,
     }));
+  }
+
+  /**
+   * Streams tournament votes up to the specified epoch (exclusive),
+   * filtering only those that have a reward.
+   */
+  async *iterateLQTVotes(epoch: bigint, subaccount?: number) {
+    yield* new ReadableStream({
+      start: async cont => {
+        let cursor = await this.db
+          .transaction('LQT_HISTORICAL_VOTES')
+          .store.index('epoch')
+          .openCursor();
+
+        while (cursor) {
+          const voteEpoch = BigInt(cursor.value.epoch);
+          const voteSubaccount = cursor.value.subaccount;
+
+          if (voteEpoch < epoch && voteSubaccount === subaccount) {
+            if (cursor.value.RewardValue) {
+              cont.enqueue({
+                incentivizedAsset: AssetId.fromJson(cursor.value.incentivizedAsset, {
+                  typeRegistry,
+                }),
+                epoch: cursor.value.epoch,
+                TransactionId: TransactionId.fromJson(cursor.value.TransactionId, { typeRegistry }),
+                VoteValue: Value.fromJson(cursor.value.VoteValue, { typeRegistry }),
+                RewardValue: Amount.fromJson(cursor.value.RewardValue, { typeRegistry }),
+                id: cursor.value.id,
+                subaccount: cursor.value.subaccount,
+              });
+            }
+          }
+
+          cursor = await cursor.continue();
+        }
+
+        cont.close();
+      },
+    });
   }
 
   /**
    * Saves historical liquidity tournament votes and rewards for a given epoch.
    */
   async saveLQTHistoricalVote(
+    incentivizedAsset: AssetId,
     epoch: bigint,
     transactionId: TransactionId,
-    assetMetadata: Metadata,
     voteValue: Value,
     rewardValue?: Amount,
     id?: string,
+    subaccount?: number,
   ): Promise<void> {
     assertTransactionId(transactionId);
 
     // This is a unique identifier to force unique primary keys. If the field isn't provided,
     // a random one is generated and used to store an object.
+    // emulating unllifier uniqueness
     const uniquePrimaryKey = id ?? crypto.randomUUID();
 
+    // TODO: saving the entire metadata is extraneous, experiment with changing
+    // @see https://github.com/penumbra-zone/web/issues/2032.
     const tournamentVote = {
+      incentivizedAsset: incentivizedAsset.toJson({ typeRegistry }) as Jsonified<AssetId>,
       epoch: epoch.toString(),
       TransactionId: transactionId.toJson({ typeRegistry }) as Jsonified<TransactionId>,
-      AssetMetadata: assetMetadata.toJson({ typeRegistry }) as Jsonified<Metadata>,
       VoteValue: voteValue.toJson({ typeRegistry }) as Jsonified<Value>,
       RewardValue: rewardValue ? (rewardValue.toJson({ typeRegistry }) as Jsonified<Amount>) : null,
       id: uniquePrimaryKey,
+      subaccount,
     };
 
     await this.u.update({
@@ -643,13 +707,15 @@ export class IndexedDb implements IndexedDbInterface {
         delegationAssets.set(uint8ArrayToHex(denomMetadata.penumbraAssetId.inner), denomMetadata);
       }
     }
+
     const notesForVoting: NotesForVotingResponse[] = [];
 
     for await (const noteCursor of this.db.transaction('SPENDABLE_NOTES').store) {
       const note = SpendableNoteRecord.fromJson(noteCursor.value);
 
+      // randomizer should be ignored
       if (
-        (addressIndex && !note.addressIndex?.equals(addressIndex)) ??
+        (addressIndex && !(note.addressIndex?.account === addressIndex.account)) ??
         !note.note?.value?.assetId?.inner
       ) {
         continue;
@@ -755,27 +821,14 @@ export class IndexedDb implements IndexedDbInterface {
   }
 
   /**
-   * Adds a new epoch with the given start height. Automatically sets the epoch
-   * index by finding the previous epoch index, and adding 1n.
+   * Adds a new epoch with start height and epoch index.
    */
-  async addEpoch(startHeight: bigint): Promise<void> {
-    const cursor = await this.db.transaction('EPOCHS', 'readonly').store.openCursor(null, 'prev');
-    const previousEpoch = cursor?.value ? Epoch.fromJson(cursor.value) : undefined;
-    const index = previousEpoch?.index !== undefined ? previousEpoch.index + 1n : 0n;
+  async addEpoch(epoch: Epoch): Promise<void> {
+    const tx = this.db.transaction('EPOCHS', 'readwrite');
 
-    // avoid saving the same epoch twice
-    if (previousEpoch?.startHeight === startHeight) {
-      return;
-    }
-
-    const newEpoch = {
-      startHeight: startHeight.toString(),
-      index: index.toString(),
-    };
-
-    await this.u.update({
-      table: 'EPOCHS',
-      value: newEpoch,
+    await tx.store.put({
+      startHeight: epoch.startHeight.toString(),
+      index: epoch.index.toString(),
     });
   }
 
@@ -817,21 +870,17 @@ export class IndexedDb implements IndexedDbInterface {
   }
 
   /**
-   * Get the block height for the correspinding epoch index.
+   * Get the epoch identified by the given epoch index.
    */
-  async getBlockHeightByEpoch(epoch_index: bigint): Promise<Epoch | undefined> {
-    let epoch: Epoch | undefined;
-
+  async getEpochByIndex(epochIndex: bigint): Promise<Epoch | undefined> {
     // Iterate over epochs and return the one with the matching epoch index.
-    for await (const cursor of this.db.transaction('EPOCHS', 'readonly').store) {
-      const currentEpoch = Epoch.fromJson(cursor.value);
-      if (currentEpoch.index === epoch_index) {
-        epoch = currentEpoch;
-        break;
+    for await (const cursor of this.db.transaction('EPOCHS').store.iterate(null, 'prev')) {
+      const epoch = Epoch.fromJson(cursor.value);
+      if (epoch.index === epochIndex) {
+        return epoch;
       }
     }
-
-    return epoch;
+    return;
   }
 
   /**
@@ -985,7 +1034,7 @@ export class IndexedDb implements IndexedDbInterface {
       txs.add({ table: 'TREE_HASHES', value: h });
     }
 
-    // TODO: What about updates.delete_ranges?
+    // TODO: What about updates.delete_ranges (https://github.com/penumbra-zone/web/issues/818)?
   }
 
   private addNewNotes(txs: IbdUpdates, notes: SpendableNoteRecord[]): void {

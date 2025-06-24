@@ -1,68 +1,96 @@
 import { observer } from 'mobx-react-lite';
+import { Text } from '@penumbra-zone/ui/Text';
+import { Skeleton } from '@penumbra-zone/ui/Skeleton';
+import { openToast } from '@penumbra-zone/ui/Toast';
+import { useCurrentEpoch } from '../../api/use-current-epoch';
+import { useTournamentSummary } from '../../api/use-tournament-summary';
+import { useEpochResults } from '../../api/use-epoch-results';
 import { GradientCard } from '../shared/gradient-card';
+import { VotingInfo } from '../voting-info';
+import { IncentivePool } from './incentive-pool';
+import { TournamentResults } from './results';
 import { Explainer } from './explainer';
-import { Stats } from './stats';
-import { VotingFooter } from './voting-footer';
+import {
+  SocialCardDialog,
+  useTournamentSocialCard,
+} from '@/pages/tournament/ui/social-card-dialog';
+import { connectionStore } from '@/shared/model/connection';
+import { usePersonalRewards } from '../../api/use-personal-rewards';
+import { LqtDelegatorHistoryData } from '../../server/delegator-history';
 
 export const LandingCard = observer(() => {
-  const epoch = 123;
-  const poolDelegators = 2000;
-  const poolLPs = 8000;
-  const poolAmount = poolLPs + poolDelegators;
-  const symbol = 'UM';
+  const { data: summary, isLoading: summaryLoading } = useTournamentSummary({
+    limit: 1,
+    page: 1,
+  });
 
-  const isBanned = false;
+  const { epoch, isLoading: epochLoading } = useCurrentEpoch(newEpoch => {
+    openToast({
+      type: 'info',
+      message: `New epoch has started: ${newEpoch}. Vote for your favorite asset!`,
+    });
+  });
 
-  const results = [
+  const {
+    assetGauges,
+    isLoading: epochGaugeLoading,
+    isPending,
+  } = useEpochResults(
+    'epoch-results-landing',
     {
-      symbol: 'USDC',
-      amount: 5000,
-      imgUrl:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
+      epoch,
+      limit: 5,
+      page: 1,
     },
-    {
-      symbol: 'OSMO',
-      amount: 4000,
-      imgUrl:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
-    },
-    {
-      symbol: 'BTC',
-      amount: 3000,
-      imgUrl:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
-    },
-    {
-      symbol: 'ATOM',
-      amount: 2000,
-      imgUrl:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
-    },
-    {
-      symbol: 'XRP',
-      amount: 1000,
-      imgUrl:
-        'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
-    },
-  ];
+    epochLoading,
+  );
+
+  const { subaccount } = connectionStore;
+  const { data: rewards } = usePersonalRewards(subaccount, epoch, false, 1, 1);
+  const latestReward = rewards.values().next().value as LqtDelegatorHistoryData | undefined;
+
+  // We want to pass the most recent epoch with rewards to trigger the social card dialogue.
+  const { isOpen: showSocial, close: hideSocial } = useTournamentSocialCard(latestReward?.epoch);
 
   return (
-    <GradientCard>
-      <div className='flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-12 p-4 md:p-6 lg:p-12'>
-        <Explainer />
-        <div className='w-full h-[1px] md:w-[1px] md:h-auto bg-other-tonalStroke flex-shrink-0' />
-        <div className='flex flex-col w-full md:w-1/2 gap-8'>
-          <Stats
-            epoch={epoch}
-            poolAmount={poolAmount}
-            poolLPs={poolLPs}
-            poolDelegators={poolDelegators}
-            symbol={symbol}
-            results={results}
-          />
-          <VotingFooter isBanned={isBanned} epoch={epoch} />
+    <>
+      <GradientCard>
+        <div className='flex flex-col gap-4 p-4 lg:gap-12 lg:p-12 md:flex-row md:gap-6 md:p-6'>
+          <Explainer />
+
+          <div className='h-px w-full shrink-0 bg-other-tonal-stroke md:h-auto md:w-px' />
+
+          <div className='flex w-full flex-col gap-8 md:w-1/2'>
+            <div className='flex justify-between'>
+              <Text variant='h3' color='text.primary'>
+                Current Epoch
+              </Text>
+              <div className='flex items-center rounded-sm bg-base-black-alt px-2'>
+                {epochLoading ? (
+                  <div className='h-6 w-16'>
+                    <Skeleton />
+                  </div>
+                ) : (
+                  <div className='bg-[linear-gradient(90deg,rgb(244,156,67),rgb(83,174,168))] bg-clip-text text-transparent'>
+                    <Text xxl>#{epoch}</Text>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <IncentivePool summary={summary?.[0]} loading={summaryLoading} />
+            <TournamentResults
+              results={assetGauges.slice(0, 5)}
+              loading={isPending || epochGaugeLoading}
+            />
+            <VotingInfo />
+          </div>
         </div>
-      </div>
-    </GradientCard>
+      </GradientCard>
+
+      {showSocial && latestReward?.epoch && (
+        <SocialCardDialog epoch={latestReward.epoch} onClose={hideSocial} />
+      )}
+    </>
   );
 });

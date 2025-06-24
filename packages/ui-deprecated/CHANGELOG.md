@@ -1,5 +1,125 @@
 # @penumbra-zone/ui
 
+## 21.0.2
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/perspective@60.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/types@34.2.1
+
+## 21.0.1
+
+### Patch Changes
+
+- 36e68f4: Fix background color of minifront, connections issues and z-index for SegmentPicker
+
+## 21.0.0
+
+### Major Changes
+
+- dcfbe8a: Upgrade to React 19 and address forwardRef deprecation across the repo
+
+### Patch Changes
+
+- @penumbra-zone/perspective@60.0.0
+
+## 20.0.2
+
+### Patch Changes
+
+- Updated dependencies [cee8150]
+  - @penumbra-zone/types@34.2.0
+  - @penumbra-zone/perspective@59.0.0
+
+## 20.0.1
+
+### Patch Changes
+
+- Updated dependencies [ec85373]
+- Updated dependencies [cba3daf]
+  - @penumbra-zone/types@34.1.0
+  - @penumbra-zone/perspective@58.0.0
+
+## 20.0.0
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/types@34.0.0
+  - @penumbra-zone/bech32m@17.0.0
+  - @penumbra-zone/perspective@57.0.0
+
+## 19.0.1
+
+### Patch Changes
+
+- Updated dependencies [085e855]
+  - @penumbra-zone/types@33.1.0
+  - @penumbra-zone/perspective@56.0.0
+
+## 19.0.0
+
+### Major Changes
+
+- 4a51a46: Upgrade to React 19
+
+## 18.0.0
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/types@33.0.0
+  - @penumbra-zone/bech32m@16.0.0
+  - @penumbra-zone/perspective@55.0.0
+
+## 17.1.6
+
+### Patch Changes
+
+- @penumbra-zone/perspective@54.0.0
+
+## 17.1.5
+
+### Patch Changes
+
+- @penumbra-zone/perspective@53.0.2
+
+## 17.1.4
+
+### Patch Changes
+
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/types@32.2.1
+  - @penumbra-zone/perspective@53.0.1
+
+## 17.1.3
+
+### Patch Changes
+
+- Updated dependencies [ce4c43e]
+  - @penumbra-zone/types@32.2.0
+  - @penumbra-zone/perspective@53.0.0
+
+## 17.1.2
+
+### Patch Changes
+
+- 80148ae: Fix bugs related to transaction history and transaction/action views
+- Updated dependencies [a5e14e9]
+- Updated dependencies [b0e0eef]
+- Updated dependencies [5c45f2c]
+- Updated dependencies [85022e1]
+- Updated dependencies [3c48120]
+  - @penumbra-zone/perspective@52.0.0
+  - @penumbra-zone/types@32.1.0
+
 ## 17.1.1
 
 ### Patch Changes

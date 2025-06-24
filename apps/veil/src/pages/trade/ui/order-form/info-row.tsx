@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Text } from '@penumbra-zone/ui/Text';
 import { Icon } from '@penumbra-zone/ui/Icon';
@@ -10,7 +11,7 @@ interface InfoRowProps {
   isLoading?: boolean;
   value?: string | number;
   valueColor?: 'success' | 'error';
-  toolTip?: string;
+  toolTip?: ReactNode;
 }
 
 const getValueColor = (valueColor: InfoRowProps['valueColor']) => {
@@ -26,14 +27,14 @@ const getValueColor = (valueColor: InfoRowProps['valueColor']) => {
 export const InfoRow = observer(
   ({ label, isLoading, value, valueColor, toolTip }: InfoRowProps) => {
     return (
-      <div className='flex items-center justify-between mb-1 last:mb-0 py-1'>
+      <div className='mb-1 flex items-center justify-between py-1 last:mb-0'>
         <Text as='div' small color='text.secondary'>
           {label}
         </Text>
         <div className='flex items-center'>
           <div className='mr-1'>
             {isLoading ? (
-              <div className='w-16 h-4'>
+              <div className='h-4 w-16'>
                 <Skeleton />
               </div>
             ) : (

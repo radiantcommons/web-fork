@@ -1,11 +1,15 @@
 import { useAssets } from '@/shared/api/assets';
-import { useParams } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 
 interface PathParams {
   baseSymbol: string;
   quoteSymbol: string;
   [key: string]: string; // required for useParams signature
+}
+
+interface PathQueryParams {
+  highlight?: 'liquidity';
 }
 
 export const usePathSymbols = () => {
@@ -18,26 +22,25 @@ export const usePathSymbols = () => {
 
 // Converts symbol to Metadata
 export const usePathToMetadata = () => {
-  const { data, error, isLoading } = useAssets();
+  const { data } = useAssets();
   const { baseSymbol, quoteSymbol } = usePathSymbols();
 
-  const query = useQuery({
-    queryKey: ['pathToMetadata', data, baseSymbol, quoteSymbol],
-    queryFn: () => {
-      return {
-        baseAsset: data?.find(m => m.symbol.toLowerCase() === baseSymbol.toLowerCase()),
-        quoteAsset: data?.find(a => a.symbol.toLowerCase() === quoteSymbol.toLowerCase()),
-      };
-    },
-  });
+  return useMemo(
+    () => ({
+      baseSymbol,
+      quoteSymbol,
+      baseAsset: data.find(m => m.symbol.toLowerCase() === baseSymbol.toLowerCase()),
+      quoteAsset: data.find(a => a.symbol.toLowerCase() === quoteSymbol.toLowerCase()),
+    }),
+    [data, baseSymbol, quoteSymbol],
+  );
+};
+
+export const usePathQuery = (): PathQueryParams => {
+  const searchParams = useSearchParams();
+  const highlight = searchParams?.get('highlight') as PathQueryParams['highlight'];
 
   return {
-    ...query,
-    baseSymbol,
-    quoteSymbol,
-    baseAsset: query.data?.baseAsset,
-    quoteAsset: query.data?.quoteAsset,
-    isLoading: isLoading || query.isLoading,
-    error: error ?? query.error,
+    highlight,
   };
 };

@@ -1,5 +1,171 @@
 # @penumbra-zone/router
 
+## 67.0.1
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/crypto-web@46.0.1
+  - @penumbra-zone/getters@27.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/storage@60.0.1
+  - @penumbra-zone/transport-dom@7.5.2
+  - @penumbra-zone/types@34.2.1
+  - @penumbra-zone/wasm@51.0.1
+
+## 67.0.0
+
+### Patch Changes
+
+- 6de12ea: Make the view service request for mapping indices to addresses take the randomizer into account.
+
+  The WASM package has a breaking change in that the `get_address_by_index` function now
+  _requires_ you to pass a randomizer.
+  This can be an empty slice, indicating a randomizer consistent of all 0s.
+  Clients should upgrade by adding a `&[]` parameter, which will preserve their current behavior.
+
+- 15e5380: use type-correct mock in tests
+- Updated dependencies [6de12ea]
+- Updated dependencies [61270de]
+  - @penumbra-zone/wasm@51.0.0
+  - @penumbra-zone/storage@60.0.0
+
+## 66.0.0
+
+### Patch Changes
+
+- Updated dependencies [6779599]
+- Updated dependencies [cee8150]
+  - @penumbra-zone/storage@59.0.0
+  - @penumbra-zone/types@34.2.0
+  - @penumbra-zone/crypto-web@46.0.0
+  - @penumbra-zone/wasm@50.0.0
+
+## 65.0.0
+
+### Patch Changes
+
+- Updated dependencies [ec85373]
+  - @penumbra-zone/storage@58.0.0
+  - @penumbra-zone/types@34.1.0
+  - @penumbra-zone/crypto-web@45.0.0
+  - @penumbra-zone/wasm@49.0.0
+
+## 64.0.0
+
+### Major Changes
+
+- dc1eb8b: tct frontier support for freshly generated wallets
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/storage@57.0.0
+  - @penumbra-zone/types@34.0.0
+  - @penumbra-zone/wasm@48.0.0
+  - @penumbra-zone/bech32m@17.0.0
+  - @penumbra-zone/getters@27.0.0
+  - @penumbra-zone/crypto-web@44.0.0
+
+## 63.0.0
+
+### Minor Changes
+
+- 085e855: use asset id instead of metadata in liquidity tournament idb table
+
+### Patch Changes
+
+- Updated dependencies [085e855]
+  - @penumbra-zone/storage@56.0.0
+  - @penumbra-zone/types@33.1.0
+  - @penumbra-zone/crypto-web@43.0.0
+  - @penumbra-zone/wasm@47.0.0
+
+## 62.0.0
+
+### Patch Changes
+
+- Updated dependencies [694319c]
+  - @penumbra-zone/storage@55.1.0
+
+## 61.0.0
+
+### Minor Changes
+
+- 93f1d05: proto and storage changes to support querying tournament votes
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/storage@55.0.0
+  - @penumbra-zone/types@33.0.0
+  - @penumbra-zone/wasm@46.0.0
+  - @penumbra-zone/bech32m@16.0.0
+  - @penumbra-zone/getters@26.0.0
+  - @penumbra-zone/crypto-web@42.0.0
+
+## 60.0.0
+
+### Patch Changes
+
+- Updated dependencies [43249b0]
+  - @penumbra-zone/wasm@45.1.0
+  - @penumbra-zone/storage@54.0.0
+
+## 59.1.0
+
+### Minor Changes
+
+- 7131df9: implement StakeService.validatorStatus
+
+### Patch Changes
+
+- @penumbra-zone/wasm@45.0.2
+- @penumbra-zone/storage@53.0.2
+
+## 59.0.1
+
+### Patch Changes
+
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/getters@25.0.1
+  - @penumbra-zone/types@32.2.1
+  - @penumbra-zone/storage@53.0.1
+  - @penumbra-zone/crypto-web@41.0.1
+  - @penumbra-zone/wasm@45.0.1
+
+## 59.0.0
+
+### Patch Changes
+
+- Updated dependencies [ce4c43e]
+  - @penumbra-zone/types@32.2.0
+  - @penumbra-zone/crypto-web@41.0.0
+  - @penumbra-zone/storage@53.0.0
+  - @penumbra-zone/wasm@45.0.0
+
+## 58.0.0
+
+### Minor Changes
+
+- f2f8fb2: add 'already_voted' field to LQT view service implementation
+
+### Patch Changes
+
+- Updated dependencies [b0e0eef]
+- Updated dependencies [5c45f2c]
+- Updated dependencies [85022e1]
+- Updated dependencies [3c48120]
+  - @penumbra-zone/types@32.1.0
+  - @penumbra-zone/crypto-web@40.0.0
+  - @penumbra-zone/storage@52.0.0
+  - @penumbra-zone/wasm@44.0.0
+
 ## 57.0.0
 
 ### Patch Changes

@@ -166,6 +166,16 @@ export const Pagination = ({
     onChange(value + 1 >= pages ? pages : value + 1);
   };
 
+  const onChangeValue = (newValue: number) => {
+    if (newValue < 1) {
+      onChange(1);
+    } else if (newValue > pages) {
+      onChange(pages);
+    } else {
+      onChange(newValue);
+    }
+  };
+
   const onSelect: ChangeEventHandler<HTMLSelectElement> = event => {
     onLimitChange?.(parseInt(event.target.value));
   };
@@ -173,9 +183,9 @@ export const Pagination = ({
   return (
     <Container
       className={cn(
-        'w-full grid items-center gap-x-6 gap-y-2 text-text-secondary',
-        'grid-rows-2 grid-cols-2',
-        'tablet:grid-rows-1 tablet:grid-cols-[auto_1fr_auto]',
+        'grid w-full items-center gap-x-6 gap-y-2 text-text-secondary',
+        'grid-cols-2 grid-rows-2',
+        'tablet:grid-cols-[auto_1fr_auto] tablet:grid-rows-1',
       )}
     >
       <div className='col-start-1 row-start-1 whitespace-nowrap'>
@@ -189,7 +199,8 @@ export const Pagination = ({
       <nav
         className={cn(
           'flex items-center justify-center gap-1 tablet:gap-3',
-          'col-span-2 row-start-2 tablet:col-span-1 tablet:col-start-2 tablet:row-start-1',
+          'col-start-1 col-end-3 row-start-2', // mobile
+          'tablet:col-start-2 tablet:row-start-1', // tablet/desktop
         )}
       >
         <Density compact>
@@ -209,7 +220,7 @@ export const Pagination = ({
                 key={index}
                 value={key}
                 active={value === key}
-                onClick={() => typeof key === 'number' && onChange(key)}
+                onClick={onChangeValue}
               />
             ))}
           </div>
@@ -245,7 +256,7 @@ export const Pagination = ({
               id={selectId}
               value={limit}
               onChange={onSelect}
-              className='invisible absolute left-0 top-0'
+              className='invisible absolute top-0 left-0'
             >
               {limitOptionsSet.map(option => (
                 <option key={option.toString()} value={option}>

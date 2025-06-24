@@ -13,7 +13,7 @@ import {
   AddressIndex,
   AddressView,
 } from '@penumbra-zone/protobuf/penumbra/core/keys/v1/keys_pb';
-import { usePathToMetadata } from '@/pages/trade/model/use-path';
+import { usePathQuery, usePathToMetadata } from '@/pages/trade/model/use-path';
 import { useBalances } from '@/shared/api/balances';
 import { connectionStore } from '@/shared/model/connection';
 import { useSubaccounts } from '@/widgets/header/api/subaccounts';
@@ -33,11 +33,12 @@ import { isMetadataEqual } from '@/shared/utils/is-metadata-equal';
 import { AssetId, Metadata } from '@penumbra-zone/protobuf/penumbra/core/asset/v1/asset_pb';
 import { getAssetMetadataById } from '@/shared/api/metadata';
 import { updatePositionsQuery } from '@/entities/position';
+import { SimpleLPFormStore } from './SimpleLPFormStore';
 
-export type WhichForm = 'Market' | 'Limit' | 'Range';
+export type WhichForm = 'Market' | 'Limit' | 'RangeLP' | 'SimpleLP';
 
 export const isWhichForm = (x: string): x is WhichForm => {
-  return x === 'Market' || x === 'Limit' || x === 'Range';
+  return x === 'Market' || x === 'Limit' || x === 'RangeLP' || x === 'SimpleLP';
 };
 
 const GAS_DEBOUNCE_MS = 320;
@@ -46,6 +47,7 @@ export class OrderFormStore {
   private _market = new MarketOrderFormStore();
   private _limit = new LimitOrderFormStore();
   private _range = new RangeOrderFormStore();
+  private _simpleLP = new SimpleLPFormStore();
   private _whichForm: WhichForm = 'Market';
   private _submitting = false;
   private _marketPrice: number | undefined = undefined;
@@ -54,6 +56,8 @@ export class OrderFormStore {
   private _feeAsset?: AssetInfo;
   private _gasFee: { symbol: string; display: string } = { symbol: 'UM', display: '--' };
   private _gasFeeLoading = false;
+  defaultDecimals = 6;
+  highlight = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -156,12 +160,14 @@ export class OrderFormStore {
     this._market.setAssets(base, quote, unsetInputs);
     this._limit.setAssets(base, quote, unsetInputs);
     this._range.setAssets(base, quote, unsetInputs);
+    this._simpleLP.setAssets(base, quote, unsetInputs);
   }
 
   setMarketPrice(price: number) {
     this._marketPrice = price;
     this._range.marketPrice = price;
     this._limit.marketPrice = price;
+    this._simpleLP.marketPrice = price;
   }
 
   get marketPrice(): number | undefined {
@@ -170,6 +176,15 @@ export class OrderFormStore {
 
   setWhichForm(x: WhichForm) {
     this._whichForm = x;
+  }
+
+  setHighlight(x: boolean) {
+    this.highlight = x;
+    if (x) {
+      setTimeout(() => {
+        this.highlight = false;
+      }, 3000);
+    }
   }
 
   get whichForm(): WhichForm {
@@ -186,6 +201,10 @@ export class OrderFormStore {
 
   get rangeForm() {
     return this._range;
+  }
+
+  get simpleLPForm() {
+    return this._simpleLP;
   }
 
   get plan(): undefined | TransactionPlannerRequest {
@@ -214,7 +233,8 @@ export class OrderFormStore {
         source: this.subAccountIndex,
       });
     }
-    const plan = this._range.plan;
+
+    const plan = this._whichForm === 'RangeLP' ? this._range.plan : this._simpleLP.plan;
     if (!plan) {
       this.resetGasFee();
       return undefined;
@@ -332,6 +352,7 @@ export const useOrderFormStore = () => {
   const { address, addressIndex } = getAccountAddress(subAccounts);
   const { data: balances } = useBalances(addressIndex?.account ?? subaccount);
   const { baseAsset, quoteAsset } = usePathToMetadata();
+  const { highlight } = usePathQuery();
   const marketPrice = useMarketPrice();
 
   // Finds a balance by given asset metadata and selected sub-account
@@ -343,10 +364,18 @@ export const useOrderFormStore = () => {
         return false;
       }
 
-      return isMetadataEqual(metadata, asset) && addressIndex.equals(address);
+      return isMetadataEqual(metadata, asset) && addressIndex.account === address.account;
     },
     [addressIndex],
   );
+
+  // if the page sets query param `highlight`, set correct tab and highlight it for 3 seconds
+  useEffect(() => {
+    if (highlight === 'liquidity') {
+      orderFormStore.setWhichForm('SimpleLP');
+      orderFormStore.setHighlight(true);
+    }
+  }, [highlight]);
 
   useEffect(() => {
     if (
@@ -364,7 +393,8 @@ export const useOrderFormStore = () => {
       const storeMapping = {
         Market: orderFormStore.marketForm,
         Limit: orderFormStore.limitForm,
-        Range: orderFormStore.rangeForm,
+        RangeLP: orderFormStore.rangeForm,
+        SimpleLP: orderFormStore.simpleLPForm,
       };
       const childStore = storeMapping[orderFormStore.whichForm];
       const prevBaseAssetInfo = childStore.baseAsset;
@@ -388,10 +418,7 @@ export const useOrderFormStore = () => {
       orderFormStore.setSubAccountIndex(addressIndex);
       orderFormStore.setAddress(address);
 
-      let umAsset: AssetInfo | undefined;
-      if (registryUM) {
-        umAsset = AssetInfo.fromMetadata(registryUM);
-      }
+      const umAsset = AssetInfo.fromMetadata(registryUM);
 
       if (umAsset && orderFormStore.feeAsset?.symbol !== umAsset.symbol) {
         orderFormStore.setFeeAsset(umAsset);

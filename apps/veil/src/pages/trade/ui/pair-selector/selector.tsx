@@ -20,7 +20,7 @@ import { FilterInput } from './filter-input';
 
 export const PairSelector = observer(() => {
   const router = useRouter();
-  const { baseAsset, quoteAsset, error, isLoading } = usePathToMetadata();
+  const { baseAsset, quoteAsset } = usePathToMetadata();
 
   const [isOpen, setIsOpen] = useState(false);
   const [baseFilter, setBaseFilter] = useState('');
@@ -89,19 +89,7 @@ export const PairSelector = observer(() => {
     }
   };
 
-  if (
-    error instanceof Error &&
-    ![
-      'ConnectError',
-      'PenumbraNotInstalledError',
-      'PenumbraProviderNotAvailableError',
-      'PenumbraProviderNotConnectedError',
-    ].includes(error.name)
-  ) {
-    return <div>Error loading pair selector: ${String(error)}</div>;
-  }
-
-  if (isLoading || !baseAsset || !quoteAsset) {
+  if (!baseAsset || !quoteAsset) {
     return (
       <div className='w-[200px]'>
         <Skeleton />
@@ -118,10 +106,10 @@ export const PairSelector = observer(() => {
 
         <Dialog.Content title='Select pair'>
           {/* Focus catcher. If this button wouldn't exist, the focus would go to the first input, which is undesirable */}
-          <button type='button' className='w-full h-0 -mt-6 focus:outline-none' />
+          <button type='button' className='-mt-6 h-0 w-full focus:outline-hidden' />
 
           <Density sparse>
-            <div className='grid grid-cols-[minmax(0,1fr),16px,minmax(0,1fr)] [&_input]:max-w-[calc(100%_-_32px)] gap-2 pt-[2px] items-center'>
+            <div className='grid grid-cols-[minmax(0,1fr)_16px_minmax(0,1fr)] items-center gap-2 pt-[2px] [&_input]:max-w-[calc(100%-32px)]'>
               <FilterInput
                 ref={baseRef}
                 value={baseFilter}
@@ -179,7 +167,7 @@ export const PairSelector = observer(() => {
           {!focusedType && <DefaultResults onSelect={pair => onSelect(pair.base, pair.quote)} />}
 
           {showConfirm && (
-            <div className='flex flex-col gap-4 sticky bottom-0 w-full rounded-sm z-10'>
+            <div className='sticky bottom-0 z-10 flex w-full flex-col gap-4 rounded-sm'>
               <Button onClick={onConfirm} priority='primary' actionType='accent'>
                 Confirm
               </Button>

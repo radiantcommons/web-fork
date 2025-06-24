@@ -8,12 +8,12 @@ import { Text } from '@penumbra-zone/ui/Text';
 import { Density } from '@penumbra-zone/ui/Density';
 import { AssetsTable } from './ui/assets-table';
 import { WalletConnect } from './ui/wallet-connect';
-import { useRegistry } from '@/shared/api/registry.ts';
+import { useRegistry } from '@/shared/api/registry.tsx';
 import { IbcChainProvider } from '@/features/cosmos/chain-provider.tsx';
-import { Onboarding } from './ui/onboarding';
 import { PortfolioPositionTabs } from './ui/position-tabs';
 import { AssetBars } from './ui/asset-bars';
 import { useUnifiedAssets } from '@/pages/portfolio/api/use-unified-assets';
+import { PenumbraWaves } from '@/pages/explore/ui/waves.tsx';
 
 interface PortfolioPageProps {
   isMobile: boolean;
@@ -25,19 +25,19 @@ export const PortfolioPage = ({ isMobile }: PortfolioPageProps): React.ReactNode
     return <MobilePortfolioPage />;
   }
 
-  return data ? (
+  return (
     <IbcChainProvider registry={data}>
       <DesktopPortfolioPage />
     </IbcChainProvider>
-  ) : null;
+  );
 };
 
 function MobilePortfolioPage() {
   return (
-    <section className='absolute inset-0 h-screen flex flex-col items-center justify-between p-4 gap-3 border-t border-neutral-800'>
-      <div className='flex flex-col justify-center items-center p-0 gap-4 w-full flex-grow'>
+    <section className='absolute inset-0 flex h-screen flex-col items-center justify-between gap-3 border-t border-neutral-800 p-4'>
+      <div className='flex w-full grow flex-col items-center justify-center gap-4 p-0'>
         <div className='relative'>
-          <XCircle className='text-neutral-light w-8 h-8' />
+          <XCircle className='h-8 w-8 text-neutral-light' />
         </div>
 
         <Text color={'text.secondary'} align={'center'} small={true}>
@@ -72,18 +72,13 @@ function MobilePortfolioPage() {
 const DesktopPortfolioPage = observer(() => {
   const { isPenumbraConnected, isCosmosConnected } = useUnifiedAssets();
   return (
-    <div className='sm:container mx-auto py-8 flex flex-col gap-4'>
-      <Onboarding />
+    <div className='container mx-auto flex max-w-[1136px] flex-col gap-4 py-8'>
+      <PenumbraWaves />
 
       <WalletConnect />
 
       {/* Asset Allocation Bars */}
-      {isPenumbraConnected ||
-        (isCosmosConnected && (
-          <div className='mb-8'>
-            <AssetBars />
-          </div>
-        ))}
+      {(isPenumbraConnected || isCosmosConnected) && <AssetBars />}
 
       <AssetsTable />
       <PortfolioPositionTabs />

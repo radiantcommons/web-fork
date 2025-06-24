@@ -3,6 +3,7 @@
 // `Cannot access 'createXSlice' before initialization` due to circular
 // references.
 import './state';
+import '@penumbra-zone/ui-deprecated/styles/globals.css';
 
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

@@ -1,5 +1,139 @@
 # @penumbra-zone/storage
 
+## 60.0.1
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/getters@27.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/types@34.2.1
+  - @penumbra-zone/wasm@51.0.1
+
+## 60.0.0
+
+### Patch Changes
+
+- Updated dependencies [6de12ea]
+- Updated dependencies [61270de]
+  - @penumbra-zone/wasm@51.0.0
+
+## 59.0.0
+
+### Minor Changes
+
+- 6779599: don't specicy auto increment key
+
+### Patch Changes
+
+- Updated dependencies [cee8150]
+  - @penumbra-zone/types@34.2.0
+  - @penumbra-zone/wasm@50.0.0
+
+## 58.0.0
+
+### Minor Changes
+
+- ec85373: storage helper to save remote epoch
+
+### Patch Changes
+
+- Updated dependencies [ec85373]
+  - @penumbra-zone/types@34.1.0
+  - @penumbra-zone/wasm@49.0.0
+
+## 57.0.0
+
+### Minor Changes
+
+- dc1eb8b: tct frontier support for freshly generated wallets
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/types@34.0.0
+  - @penumbra-zone/wasm@48.0.0
+  - @penumbra-zone/bech32m@17.0.0
+  - @penumbra-zone/getters@27.0.0
+
+## 56.0.0
+
+### Minor Changes
+
+- 085e855: use asset id instead of metadata in liquidity tournament idb table
+
+### Patch Changes
+
+- Updated dependencies [085e855]
+  - @penumbra-zone/types@33.1.0
+  - @penumbra-zone/wasm@47.0.0
+
+## 55.1.0
+
+### Minor Changes
+
+- 694319c: bump registry version
+
+## 55.0.0
+
+### Minor Changes
+
+- 93f1d05: proto and storage changes to support querying tournament votes
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/types@33.0.0
+  - @penumbra-zone/wasm@46.0.0
+  - @penumbra-zone/bech32m@16.0.0
+  - @penumbra-zone/getters@26.0.0
+
+## 54.0.0
+
+### Patch Changes
+
+- Updated dependencies [43249b0]
+  - @penumbra-zone/wasm@45.1.0
+
+## 53.0.2
+
+### Patch Changes
+
+- @penumbra-zone/wasm@45.0.2
+
+## 53.0.1
+
+### Patch Changes
+
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/getters@25.0.1
+  - @penumbra-zone/types@32.2.1
+  - @penumbra-zone/wasm@45.0.1
+
+## 53.0.0
+
+### Patch Changes
+
+- Updated dependencies [ce4c43e]
+  - @penumbra-zone/types@32.2.0
+  - @penumbra-zone/wasm@45.0.0
+
+## 52.0.0
+
+### Patch Changes
+
+- Updated dependencies [b0e0eef]
+- Updated dependencies [5c45f2c]
+- Updated dependencies [85022e1]
+- Updated dependencies [3c48120]
+  - @penumbra-zone/types@32.1.0
+  - @penumbra-zone/wasm@44.0.0
+
 ## 51.0.0
 
 ### Patch Changes

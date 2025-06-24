@@ -1,70 +1,18 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Text } from '@penumbra-zone/ui/Text';
-import { Shield, Eye } from 'lucide-react';
+import { Eye, ShieldCheckIcon, Info } from 'lucide-react';
 import { ConnectButton } from '@/features/connect/connect-button';
 import { observer } from 'mobx-react-lite';
 import { CosmosConnectButton } from '@/features/cosmos/cosmos-connect-button.tsx';
 import { useUnifiedAssets } from '../api/use-unified-assets.ts';
-import { Skeleton } from '@penumbra-zone/ui/Skeleton';
-import { dismissedKey } from './onboarding.tsx';
-
-// Custom hook to watch for localStorage changes
-const useLocalStorageState = (key: string, defaultValue: boolean): boolean => {
-  const [value, setValue] = useState(() => {
-    const storedValue = localStorage.getItem(key);
-    return storedValue === 'true' || (storedValue === null && defaultValue);
-  });
-
-  useEffect(() => {
-    // Function to check localStorage and update state if needed
-    const checkStorage = () => {
-      const storedValue = localStorage.getItem(key);
-      setValue(storedValue === 'true' || (storedValue === null && defaultValue));
-    };
-
-    // Check on window focus (most common case for changes)
-    window.addEventListener('focus', checkStorage);
-
-    // Use a MutationObserver to detect DOM changes that might indicate interaction with localStorage
-    const observer = new MutationObserver(() => {
-      checkStorage();
-    });
-
-    // Observe the document body for changes
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    // Storage event (for changes from other tabs)
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === key) {
-        setValue(event.newValue === 'true' || (event.newValue === null && defaultValue));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-
-    // Check periodically (as a fallback)
-    const interval = setInterval(checkStorage, 1000);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('focus', checkStorage);
-      window.removeEventListener('storage', handleStorageChange);
-      observer.disconnect();
-      clearInterval(interval);
-    };
-  }, [key, defaultValue]);
-
-  return value;
-};
+import { GenericShieldButton } from './shield-unshield.tsx';
+import { Tooltip } from '@penumbra-zone/ui/Tooltip';
 
 export const WalletConnect = observer(() => {
   const { isPenumbraConnected, isCosmosConnected, totalPublicValue, totalShieldedValue } =
     useUnifiedAssets();
-  const onboardingDismissed = useLocalStorageState(dismissedKey, false);
 
+  const isConnected = isPenumbraConnected || isCosmosConnected;
   // Format the values with commas and 2 decimal places
   const formattedShieldedValue = useMemo(() => {
     return totalShieldedValue.toLocaleString('en-US', {
@@ -81,33 +29,45 @@ export const WalletConnect = observer(() => {
   }, [totalPublicValue]);
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
+    <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
       {/* Shielded Assets Card */}
-      <div className='relative bg-accentRadialBackground rounded-2xl p-6 flex space-between'>
+      <div
+        className={`relative flex justify-between rounded-2xl bg-accent-radial-background p-6 backdrop-blur-lg ${
+          isConnected ? 'h-[160px]' : 'h-[420px]'
+        }`}
+      >
         <div className='absolute top-6 right-6'>
-          <Shield className='text-white opacity-10 w-8 h-8' />
+          <ShieldCheckIcon className='h-8 w-8 text-white opacity-10' />
         </div>
         <div
-          className={`flex flex-col items-start ${onboardingDismissed ? 'gap-6' : 'gap-2'} h-full justify-between`}
+          className={`flex flex-col items-start ${!isConnected ? 'gap-6' : 'gap-2'} h-full justify-between`}
         >
-          <Text color='text.secondary'>Shielded Assets</Text>
+          <div className='flex items-center gap-1'>
+            <Text color='text.secondary'>Shielded Assets</Text>
+            {isConnected && (
+              <Tooltip message='Shield your public assets into Penumbra to start trading'>
+                <Info className='h-4 w-4 text-neutral-400' />
+              </Tooltip>
+            )}
+          </div>
 
-          {/* eslint-disable-next-line no-nested-ternary -- no match expression */}
           {isPenumbraConnected ? (
             // Show total asset value when connected
             <div className='space-y-2'>
-              <div className='text-3xl font-mono text-primary-light'>
+              <div className='font-mono text-3xl text-primary-light'>
                 {formattedShieldedValue} USDC
               </div>
             </div>
-          ) : onboardingDismissed ? (
+          ) : (
             <>
-              <div className='space-y-2 text-3xl'>
-                <Text xxl color='text.primary'>
-                  Connect your <span className='text-primary-light'>Prax Wallet</span> to access
-                  shielded assets and liquidity positions
-                </Text>
-              </div>
+              {!isConnected && (
+                <div className='space-y-2 text-3xl'>
+                  <Text h4 color='text.primary'>
+                    Connect your <span className='text-primary-light'>Prax Wallet</span> to access
+                    shielded assets and liquidity positions
+                  </Text>
+                </div>
+              )}
               <div className={'w-fit'}>
                 <ConnectButton
                   variant={isCosmosConnected ? 'minimal' : 'default'}
@@ -115,49 +75,59 @@ export const WalletConnect = observer(() => {
                 />
               </div>
             </>
-          ) : (
-            <div className='w-[100px] h-[24px]'>
-              <Skeleton />
-            </div>
           )}
         </div>
       </div>
 
       {/* Public Assets Card */}
-      <div className='relative bg-unshieldRadialBackground rounded-2xl p-6 flex space-between'>
+      <div
+        className={`relative flex justify-between rounded-2xl bg-unshield-radial-background p-6 backdrop-blur-lg ${
+          isConnected ? 'h-[160px]' : 'h-[420px]'
+        }`}
+      >
         <div className='absolute top-6 right-6'>
-          <Eye className='text-white opacity-10 w-8 h-8' />
+          <Eye className='h-8 w-8 text-white opacity-10' />
         </div>
-        <div className='flex flex-col gap-2 h-full justify-between'>
-          <Text color='text.secondary'>Public Assets</Text>
+        <div className='flex h-full w-full flex-col justify-between gap-2'>
+          <div className='flex items-center gap-1'>
+            <Text color='text.secondary'>Public Assets</Text>
+            {isConnected && (
+              <Tooltip message='Fund your Cosmos Wallet in order to shield assets into Penumbra'>
+                <Info className='h-4 w-4 text-neutral-400' />
+              </Tooltip>
+            )}
+          </div>
 
-          {/* eslint-disable-next-line no-nested-ternary -- no match expression */}
           {isCosmosConnected ? (
             // Show total public asset value when connected
-            <div className='space-y-2'>
-              <div className='text-3xl font-mono text-unshield-light'>
+            <div className='flex w-full items-center justify-between'>
+              <div className='font-mono text-3xl text-unshield-light'>
                 {formattedPublicValue} USDC
               </div>
-            </div>
-          ) : onboardingDismissed ? (
-            <>
-              <div className='space-y-2 text-3xl'>
-                <Text xxl color='text.primary'>
-                  Connect your <span className='text-unshield-light'>Cosmos Wallet</span> to manage
-                  public assets and shield them in Penumbra
-                </Text>
+              <div className='flex w-fit items-center gap-2'>
+                <GenericShieldButton />
+                <CosmosConnectButton iconOnly variant={'minimal'} actionType='unshield' />
               </div>
+            </div>
+          ) : (
+            <>
+              {!isConnected && (
+                <div className='space-y-2 text-3xl'>
+                  <Text h4 color='text.primary'>
+                    Connect your <span className='text-unshield-light'>Cosmos Wallet</span> to
+                    manage public assets and shield them in Penumbra
+                  </Text>
+                </div>
+              )}
+
               <div className={'w-fit'}>
                 <CosmosConnectButton
                   variant={isPenumbraConnected ? 'minimal' : 'default'}
                   actionType='unshield'
+                  noIcon
                 />
               </div>
             </>
-          ) : (
-            <div className='w-[100px] h-[24px]'>
-              <Skeleton />
-            </div>
           )}
         </div>
       </div>

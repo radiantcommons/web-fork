@@ -1,5 +1,111 @@
 # @penumbra-zone/wasm
 
+## 51.0.1
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/types@34.2.1
+
+## 51.0.0
+
+### Major Changes
+
+- 6de12ea: Make the view service request for mapping indices to addresses take the randomizer into account.
+
+  The WASM package has a breaking change in that the `get_address_by_index` function now
+  _requires_ you to pass a randomizer.
+  This can be an empty slice, indicating a randomizer consistent of all 0s.
+  Clients should upgrade by adding a `&[]` parameter, which will preserve their current behavior.
+
+### Patch Changes
+
+- 61270de: bump penumbra protocol deps to v2.0.0-alpha.11
+
+## 50.0.0
+
+### Patch Changes
+
+- Updated dependencies [cee8150]
+  - @penumbra-zone/types@34.2.0
+
+## 49.0.0
+
+### Patch Changes
+
+- Updated dependencies [ec85373]
+  - @penumbra-zone/types@34.1.0
+
+## 48.0.0
+
+### Minor Changes
+
+- dc1eb8b: tct frontier support for freshly generated wallets
+- f9cd9dd: chunk genesis syncing
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/types@34.0.0
+  - @penumbra-zone/bech32m@17.0.0
+
+## 47.0.0
+
+### Patch Changes
+
+- Updated dependencies [085e855]
+  - @penumbra-zone/types@33.1.0
+
+## 46.0.0
+
+### Minor Changes
+
+- 93f1d05: proto and storage changes to support querying tournament votes
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/types@33.0.0
+  - @penumbra-zone/bech32m@16.0.0
+
+## 45.1.0
+
+### Minor Changes
+
+- 43249b0: spends delegation notes in the wasm planner
+
+## 45.0.2
+
+## 45.0.1
+
+### Patch Changes
+
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/types@32.2.1
+
+## 45.0.0
+
+### Patch Changes
+
+- Updated dependencies [ce4c43e]
+  - @penumbra-zone/types@32.2.0
+
+## 44.0.0
+
+### Patch Changes
+
+- Updated dependencies [b0e0eef]
+- Updated dependencies [5c45f2c]
+- Updated dependencies [85022e1]
+- Updated dependencies [3c48120]
+  - @penumbra-zone/types@32.1.0
+
 ## 43.1.0
 
 ### Minor Changes

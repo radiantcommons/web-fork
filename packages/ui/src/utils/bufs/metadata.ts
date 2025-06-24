@@ -99,12 +99,33 @@ export const USDC_METADATA = new Metadata({
 });
 
 export const OSMO_METADATA = new Metadata({
-  symbol: 'OSMO',
+  description: 'The native token of Osmosis',
+  denomUnits: [
+    {
+      denom: 'transfer/channel-4/uosmo',
+    },
+    {
+      denom: 'transfer/channel-4/osmo',
+      exponent: 6,
+    },
+  ],
+  base: 'transfer/channel-4/uosmo',
+  display: 'transfer/channel-4/osmo',
   name: 'Osmosis',
-  penumbraAssetId: new AssetId({ inner: u8(32) }),
-  base: 'uosmo',
-  display: 'osmo',
-  denomUnits: [{ denom: 'uosmo' }, { denom: 'osmo', exponent: 6 }],
+  symbol: 'OSMO',
+  penumbraAssetId: {
+    inner: base64ToUint8Array('KSOgqHs6JCHxZcyFPb9zqb2vtdoNlIVktgWcsCF8RAc='),
+  },
+  images: [
+    {
+      png: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png',
+      svg: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg',
+      theme: {
+        primaryColorHex: '#760dbb',
+      },
+    },
+  ],
+  priorityScore: 800000000099n,
 });
 
 export const PIZZA_METADATA = new Metadata({
@@ -138,4 +159,25 @@ export const LPNFT_METADATA = Metadata.fromJson({
   penumbraAssetId: {
     inner: 'rtchIR1VaNZpAxSMh7+Wf2VU8Kfs9b5qDE+kMTGsRww=',
   },
+});
+
+// Delegate action specific metadata for testing/storybook
+export const DELEGATE_ACTION_VALIDATOR_ID =
+  'penumbravalid19caff39080amxlupcjutnhcm7vh8rjfevza0hpx33pn7lnwe6vyqpekzlw';
+export const DELEGATE_ACTION_DELEGATION_DENOM = `udelegation_${DELEGATE_ACTION_VALIDATOR_ID}`;
+
+export const DELEGATE_ACTION_DELEGATION_METADATA = new Metadata({
+  display: `delegation_${DELEGATE_ACTION_VALIDATOR_ID}`,
+  base: DELEGATE_ACTION_DELEGATION_DENOM,
+  denomUnits: [
+    { denom: DELEGATE_ACTION_DELEGATION_DENOM },
+    { denom: `delegation_${DELEGATE_ACTION_VALIDATOR_ID}`, exponent: 6 },
+  ],
+  name: 'Delegated Penumbra',
+  symbol: 'delUM',
+  images: [
+    {
+      svg: 'https://raw.githubusercontent.com/prax-wallet/registry/main/images/um.svg',
+    },
+  ],
 });

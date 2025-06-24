@@ -1,5 +1,101 @@
 # @penumbra-zone/perspective
 
+## 60.0.1
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+- Updated dependencies [82d034e]
+  - @penumbra-zone/bech32m@17.0.1
+  - @penumbra-zone/getters@27.0.1
+  - @penumbra-zone/protobuf@10.1.1
+  - @penumbra-zone/wasm@51.0.1
+
+## 60.0.0
+
+### Patch Changes
+
+- Updated dependencies [6de12ea]
+- Updated dependencies [61270de]
+  - @penumbra-zone/wasm@51.0.0
+
+## 59.0.0
+
+### Patch Changes
+
+- @penumbra-zone/wasm@50.0.0
+
+## 58.0.0
+
+### Patch Changes
+
+- cba3daf: Fix transaction classification for swap and swap claim actions
+  - @penumbra-zone/wasm@49.0.0
+
+## 57.0.0
+
+### Patch Changes
+
+- Updated dependencies [dc1eb8b]
+- Updated dependencies [f9cd9dd]
+  - @penumbra-zone/protobuf@10.1.0
+  - @penumbra-zone/wasm@48.0.0
+  - @penumbra-zone/bech32m@17.0.0
+  - @penumbra-zone/getters@27.0.0
+
+## 56.0.0
+
+### Patch Changes
+
+- @penumbra-zone/wasm@47.0.0
+
+## 55.0.0
+
+### Patch Changes
+
+- Updated dependencies [93f1d05]
+  - @penumbra-zone/protobuf@10.0.0
+  - @penumbra-zone/wasm@46.0.0
+  - @penumbra-zone/bech32m@16.0.0
+  - @penumbra-zone/getters@26.0.0
+
+## 54.0.0
+
+### Patch Changes
+
+- Updated dependencies [43249b0]
+  - @penumbra-zone/wasm@45.1.0
+
+## 53.0.2
+
+### Patch Changes
+
+- @penumbra-zone/wasm@45.0.2
+
+## 53.0.1
+
+### Patch Changes
+
+- Updated dependencies [405b5b1]
+  - @penumbra-zone/getters@25.0.1
+  - @penumbra-zone/wasm@45.0.1
+
+## 53.0.0
+
+### Patch Changes
+
+- @penumbra-zone/wasm@45.0.0
+
+## 52.0.0
+
+### Minor Changes
+
+- a5e14e9: Add an adapter from LQT Plan to ActionView
+
+### Patch Changes
+
+- @penumbra-zone/wasm@44.0.0
+
 ## 51.0.0
 
 ### Patch Changes

@@ -12,6 +12,7 @@ import {
 } from '../utils/typography';
 
 export type TableCellVariant = 'title' | 'heading' | 'cell' | 'lastCell' | 'footer';
+export type TableCellJustify = 'start' | 'end' | 'center';
 
 type TableCellType = {
   [K in TableCellVariant]: Record<K, true> & Partial<Record<Exclude<TableCellVariant, K>, never>>;
@@ -30,12 +31,14 @@ export type TableCellProps = TableCellPropType & {
   loading?: boolean;
   /** Renders numbers in a monospace font with letters of equal size */
   numeric?: boolean;
+  /** Content alignment within a flexbox */
+  justify?: TableCellJustify;
 };
 
 const classesByVariant: Record<TableCellVariant, string> = {
   title: cn('text-text-primary'),
-  heading: cn('text-text-secondary border-b border-b-other-tonalStroke'),
-  cell: cn('text-text-primary border-b border-b-other-tonalStroke'),
+  heading: cn('border-b border-b-other-tonal-stroke text-text-secondary'),
+  cell: cn('border-b border-b-other-tonal-stroke text-text-primary'),
   lastCell: cn('text-text-primary'),
   footer: cn('text-text-secondary'),
 };
@@ -44,6 +47,12 @@ const classesByDensity: Record<Density, string> = {
   sparse: 'py-1 px-3 h-14',
   compact: 'py-1 px-3 h-12',
   slim: 'py-1 px-3 h-8',
+};
+
+const classesByAlignment: Record<TableCellJustify, string> = {
+  center: 'justify-center',
+  start: 'justify-start',
+  end: 'justify-end',
 };
 
 const defaultFont: Record<Density, string> = {
@@ -97,6 +106,7 @@ export const TableCell = ({
   children,
   loading,
   numeric,
+  justify,
   as: Container = 'div',
   ...props
 }: TableCellProps) => {
@@ -116,7 +126,9 @@ export const TableCell = ({
         'flex items-center gap-2',
         classesByVariant[type],
         classesByDensity[density],
+        justify && classesByAlignment[justify],
         type === 'heading' ? headingFont[density] : defaultFont[density],
+        type === 'heading' && 'whitespace-nowrap',
         numeric && 'font-mono tabular-nums',
       )}
     >

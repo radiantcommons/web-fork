@@ -1,4 +1,4 @@
-# DEX explorer for Penumbra
+# Veil
 
 A DEX explorer for [Penumbra](https://penumbra.zone/).
 
@@ -46,15 +46,26 @@ In order to run the veil, you'll need to [deploy a Penumbra fullnode](https://gu
 with [ABCI event indexing enabled](https://guide.penumbra.zone/node/pd/indexing-events). The relevant env vars
 you'll want to set are:
 
+- `NEXT_PUBLIC_BASE_URL`: the URL to website where it's deployed, e.g. `https://example.com`; used to generated OpenGraph metadata
 - `PENUMBRA_GRPC_ENDPOINT`: the URL to a remote node's `pd` gRPC service
 - `PENUMBRA_INDEXER_ENDPOINT`: the URL to a Postgre database containing ABCI events
 - `PENUMBRA_INDEXER_CA_CERT`: optional; if set, the database connection will use the provided certificate authority when validating TLS
 - `PENUMBRA_CHAIN_ID`: the chain id for the network being indexed, controls asset-registry lookups
 - `PENUMBRA_CUILOA_URL`: the URL for a block-explorer application, for generating URLs for more block/transaction info
 
-## Name
+## Build locally
 
-It'd be nice to have a cool name for the DEX explorer. We don't have one yet.
+Prerequisites:
+
+- Install [nodejs](https://nodejs.org/)
+- Install [pnpm](https://pnpm.io/installation)
+
+```shell
+pnpm install && pnpm dev
+```
+
+You now have a local copy of Veil available at
+[`https://localhost:3000`](https://localhost:3000).
 
 ## Proto Generation
 

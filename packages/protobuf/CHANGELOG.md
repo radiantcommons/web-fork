@@ -1,5 +1,23 @@
 # @penumbra-zone/protobuf
 
+## 10.1.1
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+
+## 10.1.0
+
+### Minor Changes
+
+- dc1eb8b: tct frontier support for freshly generated wallets
+
+## 10.0.0
+
+### Major Changes
+
+- 93f1d05: proto and storage changes to support querying tournament votes
+
 ## 9.0.0
 
 ### Major Changes

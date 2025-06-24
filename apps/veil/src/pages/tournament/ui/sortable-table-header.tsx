@@ -1,5 +1,5 @@
 import cn from 'clsx';
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react';
 import { TableCell } from '@penumbra-zone/ui/TableCell';
 import { Text } from '@penumbra-zone/ui/Text';
@@ -25,7 +25,7 @@ export const SortableTableHeader = <KEY extends string = string>({
     <TableCell heading>
       <button
         className={cn(
-          'flex bg-none border-none items-center gap-1',
+          'flex items-center gap-1 border-none bg-none',
           active ? 'text-text-primary' : 'text-text-secondary',
         )}
         onClick={() => {
@@ -39,7 +39,7 @@ export const SortableTableHeader = <KEY extends string = string>({
           {label}
         </Text>
 
-        <i className='flex items-center justify-center size-4'>
+        <i className='flex size-4 items-center justify-center'>
           {active ? (
             <>
               {direction === 'asc' ? (
@@ -57,17 +57,22 @@ export const SortableTableHeader = <KEY extends string = string>({
   );
 };
 
-export const useSortableTableHeaders = <KEY extends string = string>() => {
+export type GetTableHeader<KEY extends string = string> = (key: KEY, label: string) => ReactNode;
+
+export const useSortableTableHeaders = <KEY extends string = string>(
+  key: KEY | '' = '',
+  direction: SortDirection = 'desc',
+) => {
   const [sortBy, setSortBy] = useState<{
     key: KEY | '';
     direction: SortDirection;
   }>({
-    key: '',
-    direction: 'desc',
+    key,
+    direction,
   });
 
-  const getTableHeader = useCallback(
-    (key: KEY, label: string) => {
+  const getTableHeader = useCallback<GetTableHeader<KEY>>(
+    (key, label) => {
       return (
         <SortableTableHeader
           sortKey={key}

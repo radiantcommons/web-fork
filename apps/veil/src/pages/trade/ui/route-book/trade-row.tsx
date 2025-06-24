@@ -5,7 +5,7 @@ import { getSymbolFromValueView } from '@penumbra-zone/getters/value-view';
 import { Text } from '@penumbra-zone/ui/Text';
 import { Trace } from '@/shared/api/server/book/types.ts';
 import { pluralize } from '@/shared/utils/pluralize';
-import { formatNumber } from './utils';
+import { pnum } from '@penumbra-zone/types/pnum';
 
 const SELL_BG_COLOR = 'rgba(175, 38, 38, 0.24)';
 
@@ -27,20 +27,29 @@ export const TradeRow = ({
         backgroundImage: `linear-gradient(to right, ${bgColor} ${relativeSize}%, transparent ${relativeSize}%)`,
       }}
       className={cn(
-        'relative grid grid-cols-subgrid col-span-4 h-full items-center px-4 border-b border-border-faded',
-        'after:hidden after:content-[""] after:absolute after:left-0 after:right-0 after:h-full after:bg-other-tonalFill5',
-        'group [&:hover>span:not(:last-child)]:invisible hover:after:block',
+        'relative col-span-4 grid h-full grid-cols-subgrid items-center border-b border-other-tonal-fill15 px-4',
+        'after:absolute after:right-0 after:left-0 after:hidden after:h-full after:bg-other-tonal-fill5 after:content-[""]',
+        'group hover:after:block [&:hover>span:not(:last-child)]:invisible',
         'text-xs tabular-nums', // makes all numbers monospaced
       )}
     >
       <Text detailTechnical color={isSell ? 'destructive.light' : 'success.light'}>
-        {formatNumber(trace.price, 7)}
+        {pnum(trace.price).toFormattedString({
+          commas: false,
+          decimals: 7,
+        })}
       </Text>
       <Text detailTechnical align='right' color='text.primary'>
-        {formatNumber(trace.amount, 6)}
+        {pnum(trace.amount).toFormattedString({
+          commas: false,
+          decimals: 6,
+        })}
       </Text>
       <Text detailTechnical align='right' color='text.primary'>
-        {formatNumber(trace.total, 6)}
+        {pnum(trace.total).toFormattedString({
+          commas: false,
+          decimals: 6,
+        })}
       </Text>
       <Text
         tableItemSmall
@@ -52,13 +61,13 @@ export const TradeRow = ({
 
       {/* Route display that shows on hover */}
       <div
-        className='hidden group-hover:flex justify-center absolute left-0 right-0 px-4 select-none z-30'
+        className='absolute right-0 left-0 z-30 hidden justify-center px-4 select-none group-hover:flex'
         style={{ visibility: 'visible' }}
       >
         <div className='flex items-center gap-1 py-2 text-xs'>
           {tokens.map((token, index) => (
             <Fragment key={index}>
-              {index > 0 && <ChevronRight className='w-3 h-3 text-neutral-light' />}
+              {index > 0 && <ChevronRight className='h-3 w-3 text-neutral-light' />}
               <Text tableItemSmall color='text.primary'>
                 {token}
               </Text>

@@ -1,5 +1,32 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ['pino-pretty'],
+  experimental: {
+    optimizePackageImports: ['@penumbra-zone/ui', 'chain-registry', 'osmo-query', 'cosmos-kit'],
+    serverComponentsHmrCache: true,
+  },
+  turbopack: {
+    resolveAlias: {
+      '@amplitude/analytics-browser': '@repo/stubs/amplitude-analytics-browser',
+    },
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
   webpack: config => {
+    config.externals.push('pino-pretty');
+
+    config.resolve.alias['@amplitude/analytics-browser'] =
+      '@repo/stubs/amplitude-analytics-browser';
+
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
@@ -52,4 +79,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

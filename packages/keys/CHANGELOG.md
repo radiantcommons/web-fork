@@ -1,5 +1,17 @@
 # @penumbra-zone/keys
 
+## 4.2.3
+
+### Patch Changes
+
+- 82d034e: fix publish workflow
+
+## 4.2.2
+
+### Patch Changes
+
+- 1e98e03: update keys script
+
 ## 4.2.1
 
 ### Patch Changes
