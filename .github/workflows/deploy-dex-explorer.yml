@@ -1,12 +1,15 @@
 ---
 # Workflow for deploying the DEX explorer webapp https://github.com/penumbra-zone/web/apps/veil
 # Bounces a container deployment, to repull the latest image.
-name: deploy veil
+# DISABLED for Radiant Commons fork - we don't have access to DigitalOcean clusters
+name: deploy veil (DISABLED)
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # Only allow manual triggering
 
 jobs:
   build-container:

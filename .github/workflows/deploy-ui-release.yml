@@ -1,13 +1,16 @@
 # Deploys the static website for the UI storybook to final prod website,
 # on every tag push into main branch.
-name: Deploy UI to stable channel
+name: Deploy UI to stable channel (DISABLED)
+# Disabled for Radiant Commons fork - no Firebase access
+# on:
+#   # Support ad-hoc runs
+#   workflow_dispatch:
+#   # Run automatically on tag push
+#   push:
+#     tags:
+#       - '**[0-9]+.[0-9]+.[0-9]+*'
 on:
-  # Support ad-hoc runs
-  workflow_dispatch:
-  # Run automatically on tag push
-  push:
-    tags:
-      - '**[0-9]+.[0-9]+.[0-9]+*'
+  workflow_dispatch:  # Only allow manual triggering
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

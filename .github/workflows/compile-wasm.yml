@@ -1,7 +1,10 @@
-name: Compile WASM
+name: Compile WASM (DISABLED)
+# Disabled for Radiant Commons fork - only container builds needed
+# on:
+#   workflow_call:
+#   workflow_dispatch:
 on:
-  workflow_call:
-  workflow_dispatch:
+  workflow_dispatch:  # Only allow manual triggering
 
 jobs:
   wasm:

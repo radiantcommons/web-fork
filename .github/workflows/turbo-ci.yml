@@ -1,11 +1,14 @@
-name: Turbo CI
+name: Turbo CI (DISABLED)
+# Disabled for Radiant Commons fork - only container builds needed
+# on:
+#   workflow_call:
+#   workflow_dispatch:
+#   pull_request:
+#   push:
+#     branches:
+#       - main
 on:
-  workflow_call:
-  workflow_dispatch:
-  pull_request:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  # Only allow manual triggering
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
