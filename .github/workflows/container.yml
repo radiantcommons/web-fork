@@ -1,23 +1,21 @@
 ---
-name: Build container image
+name: Build Radiant Commons Veil Container
 on:
-  # Don't build on merge into main:
-  # instead, we'll trigger the container build via the "deploy" workflow,
-  # which runs on merge to main.
-  # push:
-  #   branches:
-  #     - main
+  # Build on merge into main
+  push:
+    branches:
+      - main
 
   # Also support ad-hoc and per-repo calls to trigger builds.
   workflow_call:
   workflow_dispatch:
   repository_dispatch:
 
-  # Temporary: build on PRs, to make sure workflow succeeds
+  # Build on PRs for testing
   pull_request:
 jobs:
-  veil-testnet:
-    runs-on: buildjet-16vcpu-ubuntu-2204
+  veil-radiantcommons:
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -26,13 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Log in to the Docker Hub container registry (for pulls)
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Log in to the GitHub container registry (for pushes)
+      - name: Log in to the GitHub container registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -43,7 +35,47 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/penumbra-zone/veil
+          images: ghcr.io/radiantcommons/veil
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          file: ci/containerfiles/Containerfile-veil
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BASE_URL=https://dex.penumbra.zone
+
+  veil-testnet:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/radiantcommons/veil
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -54,50 +86,7 @@ jobs:
           push: true
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ghcr.io/penumbra-zone/veil:testnet
+            ghcr.io/radiantcommons/veil:testnet
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             BASE_URL=https://dex-explorer.testnet.plinfra.net
-
-  veil-mainnet:
-    runs-on: buildjet-16vcpu-ubuntu-2204
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Log in to the Docker Hub container registry (for pulls)
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Log in to the GitHub container registry (for pushes)
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/penumbra-zone/veil
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          platforms: linux/amd64
-          file: ci/containerfiles/Containerfile-veil
-          push: true
-          tags: |
-            ${{ steps.meta.outputs.tags }}
-            ghcr.io/penumbra-zone/veil:mainnet
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            BASE_URL=https://dex-explorer.mainnet.plinfra.net
