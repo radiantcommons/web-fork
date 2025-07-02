@@ -14,7 +14,7 @@ on:
   # Build on PRs for testing
   pull_request:
 jobs:
-  veil-radiantcommons:
+  deploy-to-ovh:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -53,40 +53,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             BASE_URL=https://dex.penumbra.zone
-
-  veil-testnet:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Log in to the GitHub container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/radiantcommons/veil
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          platforms: linux/amd64
-          file: ci/containerfiles/Containerfile-veil
-          push: true
-          tags: |
-            ${{ steps.meta.outputs.tags }}
-            ghcr.io/radiantcommons/veil:testnet
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            BASE_URL=https://dex-explorer.testnet.plinfra.net
