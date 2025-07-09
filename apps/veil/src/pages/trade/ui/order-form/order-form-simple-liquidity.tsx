@@ -15,7 +15,7 @@ import { PriceSlider } from './price-slider';
 import { useEffect, useState } from 'react';
 import { Icon } from '@penumbra-zone/ui/Icon';
 import { Density } from '@penumbra-zone/ui/Density';
-import { isLqtEligible } from '@/shared/utils/is-lqt-eligible';
+import { useIsLqtEligible } from '@/shared/utils/is-lqt-eligible';
 import { LiquidityDistributionShape } from '@/shared/math/position';
 import { LiquidityShape } from './liquidity-shape';
 
@@ -23,7 +23,7 @@ export const SimpleLiquidityOrderForm = observer(
   ({ parentStore }: { parentStore: OrderFormStore }) => {
     const { connected } = connectionStore;
     const { simpleLPForm: store } = parentStore;
-    const isLQTEligible = isLqtEligible(store.baseAsset?.metadata, store.quoteAsset?.metadata);
+    const isLQTEligible = useIsLqtEligible(store.baseAsset?.metadata, store.quoteAsset?.metadata);
 
     const priceSpread = DEFAULT_PRICE_SPREAD;
     const priceRange = DEFAULT_PRICE_RANGE;
@@ -53,7 +53,7 @@ export const SimpleLiquidityOrderForm = observer(
     return (
       <div className='p-4'>
         <div className='mb-4'>
-          <div className='flex items-center gap-1 leading-6'>
+          <div className='mb-2 flex items-center gap-1 leading-6'>
             <Text small color='text.secondary'>
               Enter Amounts
             </Text>
