@@ -53,3 +53,20 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             BASE_URL=https://dex.penumbra.zone
+
+      - name: Deploy to Kubernetes
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.K8S_HOST }}
+          username: ${{ secrets.K8S_USER }}
+          key: ${{ secrets.K8S_SSH_KEY }}
+          script: |
+            # Restart veil-service deployment to pull latest image
+            kubectl rollout restart deployment veil-service -n penumbra
+            
+            # Wait for rollout to complete
+            kubectl rollout status deployment veil-service -n penumbra --timeout=300s
+            
+            # Show deployment status
+            kubectl get pods -n penumbra -l app=veil-service

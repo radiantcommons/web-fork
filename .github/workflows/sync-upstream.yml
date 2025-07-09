@@ -1,0 +1,68 @@
+---
+name: Sync Fork with Upstream
+
+on:
+  # Run every hour
+  schedule:
+    - cron: '0 * * * *'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/penumbra-zone/web.git
+          git fetch upstream
+
+      - name: Sync main branch
+        run: |
+          git checkout main
+          git pull upstream main
+          
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if git diff --quiet HEAD@{1} HEAD; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected from upstream"
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected from upstream"
+          fi
+
+      - name: Push changes
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git push origin main
+
+      - name: Create summary
+        if: steps.check-changes.outputs.changes == 'true'
+        run: |
+          echo "## 🔄 Fork Sync Completed" >> $GITHUB_STEP_SUMMARY
+          echo "Successfully synced with upstream repository: \`penumbra-zone/web\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Upstream**: https://github.com/penumbra-zone/web" >> $GITHUB_STEP_SUMMARY
+          echo "- **Synced at**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          
+          # Show recent commits from upstream
+          echo "### Recent Upstream Commits" >> $GITHUB_STEP_SUMMARY
+          git log --oneline -10 upstream/main >> $GITHUB_STEP_SUMMARY
+
+      - name: No changes summary
+        if: steps.check-changes.outputs.changes == 'false'
+        run: |
+          echo "## ✅ Fork Already Up to Date" >> $GITHUB_STEP_SUMMARY
+          echo "No new changes from upstream repository: \`penumbra-zone/web\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Last checked**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
