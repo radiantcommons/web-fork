@@ -56,23 +56,23 @@ export async function fetchStats(): Promise<Serialized<Stats>> {
   const theIndexingAsset = await indexingAssetP;
   return serialize({
     indexingAsset: theIndexingAsset,
-    totalTradingVolume: pnum(raw.direct_volume).toAmount(),
-    totalLiquidity: pnum(raw.liquidity).toAmount(),
-    trades: raw.trades,
-    activePairs: raw.active_pairs,
+    totalTradingVolume: pnum(raw.direct_volume ?? 0).toAmount(),
+    totalLiquidity: pnum(raw.liquidity ?? 0).toAmount(),
+    trades: raw.trades ?? 0,
+    activePairs: raw.active_pairs ?? 0,
     largestTradingPairByVolume: {
       pair: new DirectedTradingPair({
         start: new AssetId({ inner: raw.largest_dv_trading_pair_start }),
         end: new AssetId({ inner: raw.largest_dv_trading_pair_end }),
       }),
-      volume: pnum(raw.largest_dv_trading_pair_volume).toAmount(),
+      volume: pnum(raw.largest_dv_trading_pair_volume ?? 0).toAmount(),
     },
     topPriceMover: {
       pair: new DirectedTradingPair({
         start: new AssetId({ inner: raw.top_price_mover_start }),
         end: new AssetId({ inner: raw.top_price_mover_end }),
       }),
-      changePercent: raw.top_price_mover_change_percent,
+      changePercent: raw.top_price_mover_change_percent ?? 0,
     },
   });
 }
