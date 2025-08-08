@@ -1,9 +1,15 @@
-name: Deploy PR to Fly.io
-
+---
+# Workflow for deploying the DEX explorer webapp https://github.com/penumbra-zone/web/apps/veil
+# Bounces a container deployment, to repull the latest image.
+# DISABLED for Radiant Commons fork - we don't have access to DigitalOcean clusters
+name: deploy veil (DISABLED)
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
 on:
-  issue_comment:
-    types: [created]
-
+  workflow_dispatch:  # Only allow manual triggering
 jobs:
   deploy:
     if: |
